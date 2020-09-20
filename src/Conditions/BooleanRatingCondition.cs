@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Griesoft.Xamarin.RatingGateway.Conditions
 {
