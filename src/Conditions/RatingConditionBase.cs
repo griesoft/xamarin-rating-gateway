@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Griesoft.Xamarin.RatingGateway.Interface;
 
 namespace Griesoft.Xamarin.RatingGateway.Conditions
@@ -78,7 +76,7 @@ namespace Griesoft.Xamarin.RatingGateway.Conditions
         }
 
         /// <inheritdoc/>
-        public void Reset()
+        public virtual void Reset()
         {
             throw new NotImplementedException();
         }
