@@ -78,7 +78,7 @@ namespace Griesoft.Xamarin.RatingGateway.Conditions
         /// <inheritdoc/>
         public virtual void Reset()
         {
-            throw new NotImplementedException();
+            CurrentState = InitialState;
         }
 
         protected virtual void ManipulateState(TConditionType parameter)
