@@ -6,6 +6,8 @@
     <IsPackable>false</IsPackable>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
+    <RootNamespace>Griesoft.Xamarin.RatingGateway.Tests</RootNamespace>
+    <AssemblyName>Griesoft.Xamarin.RatingGateway.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

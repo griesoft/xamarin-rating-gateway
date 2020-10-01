@@ -1,7 +1,7 @@
 ﻿using Griesoft.Xamarin.RatingGateway.Conditions;
 using Xunit;
 
-namespace RatingGateway.Tests.Conditions
+namespace Griesoft.Xamarin.RatingGateway.Tests.Conditions
 {
     public class StringMatchConditionTests
     {
