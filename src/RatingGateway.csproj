@@ -8,4 +8,27 @@
     <RootNamespace>Griesoft.Xamarin.RatingGateway</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Platforms\**\*.cs" />
+    <None Include="Platforms\**\*.cs" />
+    <None Include="Resources\*.cs" />
+    <Compile Remove="Resources\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
+    <Compile Include="Platforms\Standard\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('monoandroid')) ">
+    <Compile Include="Platforms\Android\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('xamarinios')) ">
+    <Compile Include="Platforms\Ios\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Platforms\Ios\DefaultRatingView.cs" />
+  </ItemGroup>
+
 </Project>

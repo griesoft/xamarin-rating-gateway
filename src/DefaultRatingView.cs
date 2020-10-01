@@ -1,16 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Griesoft.Xamarin.RatingGateway
 {
     /// <inheritdoc/>
-    public class DefaultRatingView : IRatingView
+    public sealed partial class DefaultRatingView : IRatingView
     {
         /// <inheritdoc/>
-        public void TryOpenRatingPage()
+        public void TryOpenRatingPage() => PlatformTryOpenRatingPage();
+
+        internal static Version ParseVersion(string versionString)
         {
-            throw new NotImplementedException();
+            if (Version.TryParse(versionString, out var version))
+            {
+                return version;
+            }
+
+            if (int.TryParse(versionString, out var major))
+            {
+                return new Version(major, 0);
+            }
+
+            return new Version(0, 0);
         }
     }
 }
