@@ -50,9 +50,6 @@ namespace Griesoft.Xamarin.RatingGateway.Conditions
         }
 
         /// <inheritdoc/>
-        public override void ManipulateState()
-        {
-            CurrentState = !CurrentState;
-        }
+        public override void ManipulateState() => CurrentState = !CurrentState;
     }
 }
