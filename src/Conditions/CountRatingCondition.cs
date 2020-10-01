@@ -53,9 +53,6 @@ namespace Griesoft.Xamarin.RatingGateway.Conditions
 
         }
 
-        public override void ManipulateState()
-        {
-            CurrentState++;
-        }
+        public override void ManipulateState() => CurrentState++;
     }
 }

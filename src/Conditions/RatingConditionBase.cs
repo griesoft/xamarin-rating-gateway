@@ -76,14 +76,8 @@ namespace Griesoft.Xamarin.RatingGateway.Conditions
         }
 
         /// <inheritdoc/>
-        public virtual void Reset()
-        {
-            CurrentState = InitialState;
-        }
+        public virtual void Reset() => CurrentState = InitialState;
 
-        protected virtual void ManipulateState(TConditionType parameter)
-        {
-            CurrentState = parameter;
-        }
+        protected virtual void ManipulateState(TConditionType parameter) => CurrentState = parameter;
     }
 }

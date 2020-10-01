@@ -31,9 +31,6 @@ namespace Griesoft.Xamarin.RatingGateway.Conditions
         }
 
         /// <inheritdoc/>
-        public override void Reset()
-        {
-            CurrentState = DateTime.UtcNow.Add(_timeFromNowUtc);
-        }
+        public override void Reset() => CurrentState = DateTime.UtcNow.Add(_timeFromNowUtc);
     }
 }
