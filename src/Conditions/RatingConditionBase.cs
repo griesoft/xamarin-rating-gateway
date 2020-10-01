@@ -53,7 +53,7 @@ namespace Griesoft.Xamarin.RatingGateway.Conditions
         public bool ExplicitManipulationOnly { get; set; } = false;
 
         /// <inheritdoc/>
-        public bool DisallowParamaterlessManipulation { get; set; } = true;
+        public bool DisallowParamaterlessManipulation { get; set; } = false;
 
         /// <inheritdoc/>
         public ConditionType ConditionType { get; }
