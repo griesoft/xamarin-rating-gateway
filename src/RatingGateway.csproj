@@ -13,6 +13,7 @@
     <None Include="Platforms\**\*.cs" />
     <None Include="Resources\*.cs" />
     <Compile Remove="Resources\*.cs" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
@@ -25,10 +26,6 @@
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('xamarinios')) ">
     <Compile Include="Platforms\Ios\**\*.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Platforms\Ios\DefaultRatingView.cs" />
   </ItemGroup>
 
 </Project>
