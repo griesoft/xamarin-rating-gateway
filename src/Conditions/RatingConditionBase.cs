@@ -1,4 +1,5 @@
 ﻿using System;
+using Griesoft.Xamarin.RatingGateway.Cache;
 
 namespace Griesoft.Xamarin.RatingGateway.Conditions
 {
@@ -6,7 +7,7 @@ namespace Griesoft.Xamarin.RatingGateway.Conditions
     /// 
     /// </summary>
     /// <typeparam name="TConditionType"></typeparam>
-    public abstract class RatingConditionBase<TConditionType> : IRatingCondition where TConditionType : notnull
+    public abstract class RatingConditionBase<TConditionType> : IRatingCondition, ICachableCondition where TConditionType : notnull
     {
         private readonly Func<TConditionType, bool> _evaluator;
 
@@ -61,6 +62,9 @@ namespace Griesoft.Xamarin.RatingGateway.Conditions
         public bool IsConditionMet => _evaluator(CurrentState);
 
         /// <inheritdoc/>
+        public virtual bool CacheCurrentValue { get; set; } = true;
+
+        /// <inheritdoc/>
         public void ManipulateState(object parameter)
         {
             if (parameter is TConditionType cast)
@@ -76,6 +80,16 @@ namespace Griesoft.Xamarin.RatingGateway.Conditions
 
         /// <inheritdoc/>
         public virtual void Reset() => CurrentState = InitialState;
+
+        /// <inheritdoc/>
+        public virtual ConditionCacheDto ToConditionCacheDto(string conditionName)
+        {
+            return new ConditionCacheDto()
+            {
+                ConditionName = conditionName,
+                CurrentValue = CurrentState
+            };
+        }
 
         protected virtual void ManipulateState(TConditionType parameter) => CurrentState = parameter;
     }

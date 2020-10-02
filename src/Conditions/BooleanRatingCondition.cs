@@ -50,6 +50,8 @@ namespace Griesoft.Xamarin.RatingGateway
 
         }
 
+        public override bool CacheCurrentValue { get; set; } = false;
+
         /// <inheritdoc/>
         public override void ManipulateState() => CurrentState = !CurrentState;
     }
