@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Griesoft.Xamarin.RatingGateway.Cache;
 using Griesoft.Xamarin.RatingGateway.Conditions;
 
 [assembly: InternalsVisibleTo("Griesoft.Xamarin.RatingGateway.Tests")]
@@ -18,6 +19,7 @@ namespace Griesoft.Xamarin.RatingGateway
             _ratingConditions = new Dictionary<string, IRatingCondition>();
 
             RatingView = new DefaultRatingView();
+            RatingConditionCache = new DefaultRatingConditionCache();
         }
 
         /// <summary>
@@ -48,6 +50,11 @@ namespace Griesoft.Xamarin.RatingGateway
         /// <summary>
         /// 
         /// </summary>
+        public IRatingConditionCache RatingConditionCache { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static RatingGateway? Current { get; private set; }
 
         /// <summary>
@@ -56,13 +63,21 @@ namespace Griesoft.Xamarin.RatingGateway
         /// <param name="conditionName"></param>
         /// <param name="condition"></param>
         /// <param name="ratingView"></param>
-        public static void Initialize(string conditionName, IRatingCondition condition, IRatingView? ratingView = default)
+        public static void Initialize(string conditionName, IRatingCondition condition, IRatingView? ratingView = default, IRatingConditionCache? ratingCache = default)
         {
             var ratingGateway = CreateNewGatewayInstance();
 
             ratingGateway.AddCondition(conditionName, condition);
 
-            ratingGateway.RatingView = ratingView ?? new DefaultRatingView();
+            if (ratingView != null)
+            {
+                ratingGateway.RatingView = ratingView;
+            }
+
+            if (ratingCache != null)
+            {
+                ratingGateway.RatingConditionCache = ratingCache;
+            }
         }
 
         /// <summary>
@@ -70,13 +85,21 @@ namespace Griesoft.Xamarin.RatingGateway
         /// </summary>
         /// <param name="conditions"></param>
         /// <param name="ratingView"></param>
-        public static void Initialize(IEnumerable<KeyValuePair<string, IRatingCondition>> conditions, IRatingView? ratingView = default)
+        public static void Initialize(IEnumerable<KeyValuePair<string, IRatingCondition>> conditions, IRatingView? ratingView = default, IRatingConditionCache? ratingCache = default)
         {
             var ratingGateway = CreateNewGatewayInstance();
 
             ratingGateway.AddCondition(conditions);
 
-            ratingGateway.RatingView = ratingView ?? new DefaultRatingView();
+            if (ratingView != null)
+            {
+                ratingGateway.RatingView = ratingView;
+            }
+
+            if (ratingCache != null)
+            {
+                ratingGateway.RatingConditionCache = ratingCache;
+            }
         }
 
         /// <summary>
@@ -87,6 +110,11 @@ namespace Griesoft.Xamarin.RatingGateway
         public void AddCondition(string conditionName, IRatingCondition condition)
         {
             _ratingConditions.Add(conditionName, condition);
+
+            if (condition is ICachableCondition cachableCondition && cachableCondition.CacheCurrentValue)
+            {
+                RatingConditionCache.Load(conditionName, cachableCondition);
+            }
         }
 
         /// <summary>
@@ -97,7 +125,7 @@ namespace Griesoft.Xamarin.RatingGateway
         {
             foreach(var condition in conditions)
             {
-                _ratingConditions.Add(condition.Key, condition.Value);
+                AddCondition(condition.Key, condition.Value);
             }
         }
 
@@ -118,6 +146,8 @@ namespace Griesoft.Xamarin.RatingGateway
             foreach(var condition in _ratingConditions)
             {
                 condition.Value.Reset();
+
+                SaveCachableConditionState(condition.Key, condition.Value);
             }
         }
 
@@ -186,6 +216,8 @@ namespace Griesoft.Xamarin.RatingGateway
             foreach(var condition in _ratingConditions.Where(con => con.Value.ResetAfterConditionMet && con.Value.IsConditionMet))
             {
                 condition.Value.Reset();
+
+                SaveCachableConditionState(condition.Key, condition.Value);
             }
         }
         private void ManipulateConditionState(Dictionary<string, object?>? parameters)
@@ -202,10 +234,12 @@ namespace Griesoft.Xamarin.RatingGateway
                 else if (!(conditionParam is null))
                 {
                     condition.Value.ManipulateState(conditionParam);
+                    SaveCachableConditionState(condition.Key, condition.Value);
                 }
                 else if (!condition.Value.DisallowParamaterlessManipulation)
                 {
                     condition.Value.ManipulateState();
+                    SaveCachableConditionState(condition.Key, condition.Value);
                 }
             }
         }
@@ -245,6 +279,13 @@ namespace Griesoft.Xamarin.RatingGateway
             // No condition was prioritized, so it is enough for any standard condition to be true
             return _ratingConditions.Any(condition => condition.Value.ConditionType == ConditionType.Standard &&
                 condition.Value.IsConditionMet);
+        }
+        private void SaveCachableConditionState(string conditionName, IRatingCondition condition)
+        {
+            if (condition is ICachableCondition cachableCondition && cachableCondition.CacheCurrentValue)
+            {
+                RatingConditionCache.Save(conditionName, cachableCondition);
+            }
         }
     }
 }
