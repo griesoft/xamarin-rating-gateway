@@ -1,5 +1,4 @@
 ﻿using System;
-using Griesoft.Xamarin.RatingGateway.Interface;
 
 namespace Griesoft.Xamarin.RatingGateway.Conditions
 {

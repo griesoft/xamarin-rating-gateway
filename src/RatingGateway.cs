@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Griesoft.Xamarin.RatingGateway.Interface;
+using Griesoft.Xamarin.RatingGateway.Conditions;
 
 [assembly: InternalsVisibleTo("Griesoft.Xamarin.RatingGateway.Tests")]
 namespace Griesoft.Xamarin.RatingGateway

@@ -1,4 +1,4 @@
-﻿namespace Griesoft.Xamarin.RatingGateway.Interface
+﻿namespace Griesoft.Xamarin.RatingGateway.Conditions
 {
     /// <summary>
     /// 

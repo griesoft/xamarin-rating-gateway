@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Griesoft.Xamarin.RatingGateway.Conditions;
-using Griesoft.Xamarin.RatingGateway.Interface;
 using Moq;
 using Xunit;
 

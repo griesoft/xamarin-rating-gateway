@@ -1,5 +1,4 @@
-﻿using Griesoft.Xamarin.RatingGateway.Conditions;
-using Xunit;
+﻿using Xunit;
 
 namespace Griesoft.Xamarin.RatingGateway.Tests.Conditions
 {
