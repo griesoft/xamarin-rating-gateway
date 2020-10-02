@@ -45,5 +45,21 @@ namespace Griesoft.Xamarin.RatingGateway.Tests.Conditions
             // Assert
             Assert.Equal(initial, condition.CurrentState);
         }
+
+        [Fact]
+        public void ToConditionCacheDto_Returns_ExpectedResult()
+        {
+            // Arrange
+            var condition = new RatingCondition<int>(0, i => i > 3);
+            condition.ManipulateState(5);
+
+            // Act
+            var dto = condition.ToConditionCacheDto("test");
+
+            // Assert
+            Assert.NotNull(dto);
+            Assert.Equal("test", dto.ConditionName);
+            Assert.Equal(5, dto.CurrentValue);
+        }
     }
 }

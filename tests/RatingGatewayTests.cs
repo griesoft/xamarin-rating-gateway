@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Griesoft.Xamarin.RatingGateway.Cache;
 using Griesoft.Xamarin.RatingGateway.Conditions;
 using Moq;
 using Xunit;
@@ -19,6 +21,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
 
             // Assert
             Assert.NotNull(RatingGateway.Current?.RatingView);
+            Assert.NotNull(RatingGateway.Current?.RatingConditionCache);
         }
 
         [Fact]
@@ -95,6 +98,30 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
+        public void AddCondition_ShouldLoad_CachedStateOfCachables()
+        {
+            // Arrange
+            var cacheStub = new Mock<IRatingConditionCache>();
+            var ratingGateway = new RatingGateway()
+            {
+                RatingConditionCache = cacheStub.Object
+            };
+
+            // Act
+            ratingGateway.AddCondition("test", new BooleanRatingCondition());
+            ratingGateway.AddCondition("test2", new CountRatingCondition(0, 3));
+            ratingGateway.AddCondition(new Dictionary<string, IRatingCondition>()
+            {
+                { "test3", new BooleanRatingCondition() },
+                { "test4", new CountRatingCondition(0, 3) }
+            });
+
+            // Assert
+            Assert.Equal(4, ratingGateway.RatingConditions.Count());
+            cacheStub.Verify(cache => cache.Load(It.IsAny<string>(), It.IsAny<ICachableCondition>()), Times.Exactly(2));
+        }
+
+        [Fact]
         public void RemoveCondition_IsSuccessful()
         {
             // Arrange
@@ -112,8 +139,8 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         public void ResetAllConditions_IsSuccessful()
         {
             // Arrange
-            var condition1 = new CountRatingCondition(0, 10);
-            var condition2 = new CountRatingCondition(1, 7);
+            var condition1 = new CountRatingCondition(0, 10) { CacheCurrentValue = false };
+            var condition2 = new CountRatingCondition(1, 7) { CacheCurrentValue = false };
             var conditions = new Dictionary<string, IRatingCondition>()
             {
                 { "Test1", condition1 },
@@ -132,6 +159,25 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             Assert.False(condition2.IsConditionMet);
         }
 
+        [Fact]
+        public void ResetAllConditions_ShouldSave_StateOfCachables()
+        {
+            // Arrange
+            var cacheStub = new Mock<IRatingConditionCache>();
+            var ratingGateway = new RatingGateway()
+            {
+                RatingConditionCache = cacheStub.Object
+            };
+            ratingGateway.AddCondition("test", new CountRatingCondition(1, 4) { CacheCurrentValue = false });
+            ratingGateway.AddCondition("test2", new CountRatingCondition(0, 3));
+
+            // Act
+            ratingGateway.ResetAllConditions();
+
+            // Assert
+            cacheStub.Verify(cache => cache.Save(It.IsAny<string>(), It.IsAny<ICachableCondition>()), Times.Once);
+        }
+
         [Theory]
         [InlineData("Test", 8, false, false, 8)]
         [InlineData("Test", 5, true, false, 5)]
@@ -147,7 +193,8 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             var condition = new CountRatingCondition(0, 10)
             {
                 ExplicitManipulationOnly = explicitOnly,
-                DisallowParamaterlessManipulation = disallowParameterless
+                DisallowParamaterlessManipulation = disallowParameterless,
+                CacheCurrentValue = false
             };
             var gateway = new RatingGateway();
             gateway.AddCondition(key ?? nameof(CountRatingCondition), condition);
@@ -167,6 +214,34 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
 
             // Assert
             Assert.Equal(expected, condition.CurrentState);
+        }
+
+        [Fact]
+        public void RatingActionTriggered_ManipulateShould_SaveStateOfCachables()
+        {
+            // Arrange
+            var cacheStub = new Mock<IRatingConditionCache>();
+            var ratingGateway = new RatingGateway()
+            {
+                RatingConditionCache = cacheStub.Object
+            };
+            ratingGateway.AddCondition("test", new BooleanRatingCondition());
+            ratingGateway.AddCondition("test2", new CountRatingCondition(0, 3));
+
+            // Act
+            ratingGateway.RatingActionTriggered(new Dictionary<string, object?>()
+            {
+                { "test", null },
+                { "test2", null }
+            });
+            ratingGateway.RatingActionTriggered(new Dictionary<string, object?>()
+            {
+                { "test", false },
+                { "test2", 1 }
+            });
+
+            // Assert
+            cacheStub.Verify(cache => cache.Save(It.IsAny<string>(), It.IsAny<ICachableCondition>()), Times.Exactly(2));
         }
 
         [Fact]
@@ -196,7 +271,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             {
                 RatingView = ratingViewMock.Object
             };
-            gateway.AddCondition("test", new CountRatingCondition(0, 5, ConditionType.Prerequisite));
+            gateway.AddCondition("test", new CountRatingCondition(0, 5, ConditionType.Prerequisite) { CacheCurrentValue = false });
             gateway.AddCondition("test2", new BooleanRatingCondition());
 
             // Act
@@ -235,7 +310,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
                 RatingView = ratingViewMock.Object
             };
             gateway.AddCondition("test", new BooleanRatingCondition(ConditionType.Prerequisite));
-            gateway.AddCondition("test2", new CountRatingCondition(0, 5));
+            gateway.AddCondition("test2", new CountRatingCondition(0, 5) { CacheCurrentValue = false });
 
             // Act
             gateway.RatingActionTriggered();
@@ -254,7 +329,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
                 RatingView = ratingViewMock.Object
             };
             gateway.AddCondition("test", new BooleanRatingCondition());
-            gateway.AddCondition("test2", new CountRatingCondition(0, 5, ConditionType.Requirement));
+            gateway.AddCondition("test2", new CountRatingCondition(0, 5, ConditionType.Requirement) { CacheCurrentValue = false });
 
             // Act
             gateway.RatingActionTriggered();
@@ -273,7 +348,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
                 RatingView = ratingViewMock.Object
             };
             gateway.AddCondition("test", new BooleanRatingCondition(ConditionType.Requirement));
-            gateway.AddCondition("test2", new CountRatingCondition(0, 5, ConditionType.Requirement));
+            gateway.AddCondition("test2", new CountRatingCondition(0, 5, ConditionType.Requirement) { CacheCurrentValue = false });
 
             // Act
             gateway.RatingActionTriggered();
@@ -292,7 +367,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
                 RatingView = ratingViewMock.Object
             };
             gateway.AddCondition("test", new BooleanRatingCondition(ConditionType.Requirement));
-            gateway.AddCondition("test2", new CountRatingCondition(0, 5));
+            gateway.AddCondition("test2", new CountRatingCondition(0, 5) { CacheCurrentValue = false });
 
             // Act
             gateway.RatingActionTriggered();
@@ -311,7 +386,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
                 RatingView = ratingViewMock.Object
             };
             gateway.AddCondition("test", new BooleanRatingCondition(ConditionType.Requirement));
-            gateway.AddCondition("test2", new CountRatingCondition(0, 5));
+            gateway.AddCondition("test2", new CountRatingCondition(0, 5) { CacheCurrentValue = false });
 
             // Act
             gateway.RatingActionTriggered("test2");
@@ -330,7 +405,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
                 RatingView = ratingViewMock.Object
             };
             gateway.AddCondition("test", new BooleanRatingCondition());
-            gateway.AddCondition("test2", new CountRatingCondition(0, 5));
+            gateway.AddCondition("test2", new CountRatingCondition(0, 5) { CacheCurrentValue = false });
 
             // Act
             gateway.RatingActionTriggered("test2");
@@ -349,7 +424,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
                 RatingView = ratingViewMock.Object
             };
             gateway.AddCondition("test", new BooleanRatingCondition());
-            gateway.AddCondition("test2", new CountRatingCondition(0, 5));
+            gateway.AddCondition("test2", new CountRatingCondition(0, 5) { CacheCurrentValue = false });
             gateway.AddCondition("test3", new BooleanRatingCondition());
 
             // Act
@@ -373,7 +448,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
                 RatingView = ratingViewMock.Object
             };
             gateway.AddCondition("test", new BooleanRatingCondition());
-            gateway.AddCondition("test2", new CountRatingCondition(0, 5));
+            gateway.AddCondition("test2", new CountRatingCondition(0, 5) { CacheCurrentValue = false });
             gateway.AddCondition("test3", new BooleanRatingCondition());
 
             // Act
@@ -392,8 +467,8 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             {
                 RatingView = ratingViewMock.Object
             };
-            gateway.AddCondition("test", new CountRatingCondition(0, 5));
-            gateway.AddCondition("test2", new CountRatingCondition(0, 10));
+            gateway.AddCondition("test", new CountRatingCondition(0, 5) { CacheCurrentValue = false });
+            gateway.AddCondition("test2", new CountRatingCondition(0, 10) { CacheCurrentValue = false });
 
             // Act
             gateway.RatingActionTriggered();
@@ -411,7 +486,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             {
                 RatingView = ratingViewMock.Object
             };
-            gateway.AddCondition("test", new CountRatingCondition(0, 5));
+            gateway.AddCondition("test", new CountRatingCondition(0, 5) { CacheCurrentValue = false });
             gateway.AddCondition("test2", new BooleanRatingCondition());
 
             // Act
@@ -430,7 +505,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             {
                 RatingView = ratingViewMock.Object
             };
-            gateway.AddCondition("test", new CountRatingCondition(0, 5));
+            gateway.AddCondition("test", new CountRatingCondition(0, 5) { CacheCurrentValue = false });
             gateway.AddCondition("test2", new BooleanRatingCondition());
 
             // Act
@@ -449,7 +524,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             {
                 RatingView = ratingViewMock.Object
             };
-            var condition1 = new CountRatingCondition(0, 1, ConditionType.Requirement);
+            var condition1 = new CountRatingCondition(0, 1, ConditionType.Requirement) { CacheCurrentValue = false };
             var condition2 = new BooleanRatingCondition(ConditionType.Requirement);
             gateway.AddCondition("test", condition1);
             gateway.AddCondition("test2", condition2);
@@ -464,6 +539,32 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
+        public void RatingActionTriggered_ResetAllMetConditionsShould_SaveStateOfCachables()
+        {
+            // Arrange
+            var ratingViewStub = new Mock<IRatingView>();
+            var cacheStub = new Mock<IRatingConditionCache>();
+            var ratingGateway = new RatingGateway()
+            {
+                RatingView = ratingViewStub.Object,
+                RatingConditionCache = cacheStub.Object
+            };
+            ratingGateway.AddCondition("test", new CountRatingCondition(0, 1) { CacheCurrentValue = false });
+            ratingGateway.AddCondition("test2", new CountRatingCondition(0, 1));
+
+            // Act
+            ratingGateway.RatingActionTriggered(new Dictionary<string, object?>()
+            {
+                { "test", null },
+                { "test2", null }
+            });
+
+            // Assert
+            ratingViewStub.Verify(rating => rating.TryOpenRatingPage(), Times.Once);
+            cacheStub.Verify(cache => cache.Save(It.IsAny<string>(), It.IsAny<ICachableCondition>()), Times.Exactly(2));
+        }
+
+        [Fact]
         public void RatingActionTriggered_DoesResetAll_ExceptStrictlyForbiddenOnes()
         {
             // Arrange
@@ -472,7 +573,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             {
                 RatingView = ratingViewMock.Object
             };
-            var condition1 = new CountRatingCondition(0, 1, ConditionType.Requirement);
+            var condition1 = new CountRatingCondition(0, 1, ConditionType.Requirement) { CacheCurrentValue = false };
             var condition2 = new BooleanRatingCondition(ConditionType.Requirement)
             {
                 ResetAfterConditionMet = false
