@@ -63,5 +63,20 @@ namespace Griesoft.Xamarin.RatingGateway.Cache
 
             File.WriteAllText(Path.Combine(CacheHelpers.AppDataDirectory, _conditionCacheFileName), JsonConvert.SerializeObject(_lazyConditionCacheDtos.Value));
         }
+
+        /// <inheritdoc/>
+        public void Delete(string conditionName)
+        {
+            var cachedValueDto = _lazyConditionCacheDtos.Value.FirstOrDefault(dto => dto.ConditionName == conditionName);
+
+            if (cachedValueDto == null)
+            {
+                return;
+            }
+
+            _lazyConditionCacheDtos.Value.Remove(cachedValueDto);
+
+            File.WriteAllText(Path.Combine(CacheHelpers.AppDataDirectory, _conditionCacheFileName), JsonConvert.SerializeObject(_lazyConditionCacheDtos.Value));
+        }
     }
 }

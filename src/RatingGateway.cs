@@ -133,9 +133,14 @@ namespace Griesoft.Xamarin.RatingGateway
         /// 
         /// </summary>
         /// <param name="conditionName"></param>
-        public void RemoveCondition(string conditionName)
+        public void RemoveCondition(string conditionName, bool removeFromCache = true)
         {
             _ratingConditions.Remove(conditionName);
+
+            if (removeFromCache)
+            {
+                RatingConditionCache.Delete(conditionName);
+            }
         }
 
         /// <summary>

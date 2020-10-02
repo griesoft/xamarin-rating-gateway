@@ -129,10 +129,44 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("Test", new BooleanRatingCondition());
 
             // Act
-            gateway.RemoveCondition("Test");
+            gateway.RemoveCondition("Test", false);
 
             // Assert
             Assert.Empty(gateway.RatingConditions);
+        }
+
+        [Fact]
+        public void RemoveCondition_Removes_CachedValue()
+        {
+            // Arrange
+            var cacheStub = new Mock<IRatingConditionCache>();
+            var ratingGateway = new RatingGateway()
+            {
+                RatingConditionCache = cacheStub.Object
+            };
+
+            // Act
+            ratingGateway.RemoveCondition("test");
+
+            // Assert
+            cacheStub.Verify(cache => cache.Delete(It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
+        public void RemoveCondition_DoesntRemove_CachedValue()
+        {
+            // Arrange
+            var cacheStub = new Mock<IRatingConditionCache>();
+            var ratingGateway = new RatingGateway()
+            {
+                RatingConditionCache = cacheStub.Object
+            };
+
+            // Act
+            ratingGateway.RemoveCondition("test", false);
+
+            // Assert
+            cacheStub.Verify(cache => cache.Delete(It.IsAny<string>()), Times.Never);
         }
 
         [Fact]
