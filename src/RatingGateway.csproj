@@ -8,6 +8,10 @@
     <RootNamespace>Griesoft.Xamarin.RatingGateway</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|xamarinios10|AnyCPU'">
+    <DocumentationFile>D:\repos\RatingGateway\docs\Griesoft.Xamarin.RatingGateway.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Platforms\**\*.cs" />
     <None Include="Platforms\**\*.cs" />

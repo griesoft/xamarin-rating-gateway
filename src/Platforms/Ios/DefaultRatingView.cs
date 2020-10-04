@@ -6,7 +6,7 @@ using UIKit;
 namespace Griesoft.Xamarin.RatingGateway
 {
     /// <summary>
-    /// 
+    /// A default rating view implementation for iOS.
     /// </summary>
     public sealed partial class DefaultRatingView
     {

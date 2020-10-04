@@ -8,8 +8,16 @@ using Griesoft.Xamarin.RatingGateway.Conditions;
 namespace Griesoft.Xamarin.RatingGateway
 {
     /// <summary>
-    /// 
+    /// The rating gateway manages when a <see cref="IRatingView"/> should open a rating page, based on a <see cref="IRatingCondition"/> collection. The gateway is
+    /// a singleton service and you should initialize the service with one of the initialize methods <see cref="Initialize(string, IRatingCondition, IRatingView?, IRatingConditionCache?)"/>
+    /// <see cref="Initialize(IEnumerable{KeyValuePair{string, IRatingCondition}}, IRatingView?, IRatingConditionCache?)"/>.
+    /// <para/>
+    /// After initialization, you can access the service via the <see cref="Current"/> property.
     /// </summary>
+    /// <remarks>
+    /// Each time a rating action is triggered the gateway will manipulate conditions by given factors, evaluate through them to check if all necessary conditions are met,
+    /// reset met conditions if allowed, and cache the current state of cachable conditions.
+    /// </remarks>
     public class RatingGateway
     {
         private readonly Dictionary<string, IRatingCondition> _ratingConditions;
@@ -23,46 +31,51 @@ namespace Griesoft.Xamarin.RatingGateway
         }
 
         /// <summary>
-        /// 
+        /// The condition collection returned as an enumerable.
         /// </summary>
         public IEnumerable<KeyValuePair<string, IRatingCondition>> RatingConditions => _ratingConditions.AsEnumerable();
 
         /// <summary>
-        /// 
+        /// True if the condition collection contains any condition that is of type <see cref="ConditionType.Prerequisite"/>.
         /// </summary>
         public bool HasPrerequisiteConditions => _ratingConditions.Any(condition => condition.Value.ConditionType == ConditionType.Prerequisite);
 
         /// <summary>
-        /// 
+        /// True if the condition collection contains any condition that is of type <see cref="ConditionType.Requirement"/>.
         /// </summary>
         public bool HasRequiredConditions => _ratingConditions.Any(condition => condition.Value.ConditionType == ConditionType.Requirement);
 
         /// <summary>
-        /// 
+        /// True if the condition collection contains only conditions that are of type <see cref="ConditionType.Prerequisite"/>.
         /// </summary>
+        /// <remarks>
+        /// Make sure that this always returns false. If it doesn't, the rating gateway will never prompt the user to review your application. 
+        /// </remarks>
         public bool HasOnlyPrerequisiteConditions => _ratingConditions.Count > 0 && _ratingConditions.All(condition => condition.Value.ConditionType == ConditionType.Prerequisite);
 
         /// <summary>
-        /// 
+        /// The rating view that does display the rating page to the user.
         /// </summary>
         public IRatingView RatingView { get; set; }
 
         /// <summary>
-        /// 
+        /// The rating condition cache that does manage the reading and writing of cached values to the file system.
         /// </summary>
         public IRatingConditionCache RatingConditionCache { get; set; }
 
         /// <summary>
-        /// 
+        /// The singleton instance of this rating gateway. Returns null if the service was not initialized on application startup.
         /// </summary>
         public static RatingGateway? Current { get; private set; }
 
         /// <summary>
-        /// 
+        /// Initialize the rating gateway with a single condition.
         /// </summary>
-        /// <param name="conditionName"></param>
-        /// <param name="condition"></param>
-        /// <param name="ratingView"></param>
+        /// <param name="conditionName">The unique name of the condition.</param>
+        /// <param name="condition">The condition instance that will be added to the collection.</param>
+        /// <param name="ratingView">Optional; pass a custom rating view. If not specified or null, <see cref="DefaultRatingView"/> will be used instead.</param>
+        /// <param name="ratingCache">Optional; pass a custom condition cache. If not specified or null, <see cref="DefaultRatingConditionCache"/> will be used instead.</param>
+        /// <exception cref="System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
         public static void Initialize(string conditionName, IRatingCondition condition, IRatingView? ratingView = default, IRatingConditionCache? ratingCache = default)
         {
             var ratingGateway = CreateNewGatewayInstance();
@@ -81,10 +94,12 @@ namespace Griesoft.Xamarin.RatingGateway
         }
 
         /// <summary>
-        /// 
+        /// Initialize the rating gateway with a collection of conditions.
         /// </summary>
-        /// <param name="conditions"></param>
-        /// <param name="ratingView"></param>
+        /// <param name="conditions">A collection of key value pairs where the key will be used as the unique condition name and the value is added to the condition collection.</param>
+        /// <param name="ratingView">Optional; pass a custom rating view. If not specified or null, <see cref="DefaultRatingView"/> will be used instead.</param>
+        /// <param name="ratingCache">Optional; pass a custom condition cache. If not specified or null, <see cref="DefaultRatingConditionCache"/> will be used instead.</param>
+        /// <exception cref="System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
         public static void Initialize(IEnumerable<KeyValuePair<string, IRatingCondition>> conditions, IRatingView? ratingView = default, IRatingConditionCache? ratingCache = default)
         {
             var ratingGateway = CreateNewGatewayInstance();
@@ -103,10 +118,11 @@ namespace Griesoft.Xamarin.RatingGateway
         }
 
         /// <summary>
-        /// 
+        /// Add a condition to the collection.
         /// </summary>
-        /// <param name="conditionName"></param>
-        /// <param name="condition"></param>
+        /// <param name="conditionName">The unique name of the condition.</param>
+        /// <param name="condition">The condition instance that will be added to the collection.</param>
+        /// <exception cref="System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
         public void AddCondition(string conditionName, IRatingCondition condition)
         {
             _ratingConditions.Add(conditionName, condition);
@@ -118,9 +134,10 @@ namespace Griesoft.Xamarin.RatingGateway
         }
 
         /// <summary>
-        /// 
+        /// Add multiple conditions to the collection at once.
         /// </summary>
-        /// <param name="coniditions"></param>
+        /// <param name="conditions">A collection of key-value pairs where the key is used as the unique condition name and the value is added to the condition collection.</param>
+        /// <exception cref="System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
         public void AddCondition(IEnumerable<KeyValuePair<string, IRatingCondition>> conditions)
         {
             foreach(var condition in conditions)
@@ -130,9 +147,10 @@ namespace Griesoft.Xamarin.RatingGateway
         }
 
         /// <summary>
-        /// 
+        /// Remove a condition with the specified name from the collection if it exists.
         /// </summary>
-        /// <param name="conditionName"></param>
+        /// <param name="conditionName">The unique name of the condition.</param>
+        /// <param name="removeFromCache">If true a cached state of the condition will also be removed from the cache. By default true.</param>
         public void RemoveCondition(string conditionName, bool removeFromCache = true)
         {
             _ratingConditions.Remove(conditionName);
@@ -144,7 +162,7 @@ namespace Griesoft.Xamarin.RatingGateway
         }
 
         /// <summary>
-        /// 
+        /// Reset all condition states in the collection.
         /// </summary>
         public void ResetAllConditions()
         {
@@ -157,8 +175,12 @@ namespace Griesoft.Xamarin.RatingGateway
         }
 
         /// <summary>
-        /// 
+        /// Evaluate through all conditions in the collection and if all necessary conditions are met open the rating page.
         /// </summary>
+        /// <remarks>
+        /// The evaluation process will first manipulate all conditions that allow implicit manipulation by using their parameterless manipulation method.
+        /// After manipulation, the actual evaluation will happen, and after evaluation has finished all met conditions will be reset which allow automatic reset.
+        /// </remarks>
         public void RatingActionTriggered()
         {
             ManipulateConditionState(null);
@@ -172,11 +194,18 @@ namespace Griesoft.Xamarin.RatingGateway
         }
 
         /// <summary>
-        /// 
+        /// Evaluate through all conditions in the collection and if all necessary conditions are met open the rating page.
         /// </summary>
-        /// <param name="conditionName"></param>
-        /// <param name="parameter"></param>
-        /// <param name="manipulateOnly"></param>
+        /// <param name="conditionName">The unique name of the condition that should be prioritized.</param>
+        /// <param name="parameter">An optional parameter that will be passed to the manipulation process for the specified condition.</param>
+        /// <param name="manipulateOnly">Set to true if the specified condition should not be prioritized in the actual evaluation phase and be used for manipulation only. The default is false.</param>
+        /// <remarks>
+        /// The evaluation process will first manipulate all conditions that allow implicit manipulation by using their parameterless manipulation method.
+        /// After manipulation, the actual evaluation will happen, and after evaluation has finished all met conditions will be reset which allow automatic reset.
+        /// <para/>
+        /// If the specified condition is not used for manipulation only, it will be prioritized by the evaluator. This means that the prioritized condition must be
+        /// met in addition to all prerequisite and required conditions, before evaluating to true.
+        /// </remarks>
         public void RatingActionTriggered(string conditionName, object? parameter = default, bool manipulateOnly = false)
         {
             ManipulateConditionState(new Dictionary<string, object?>() { { conditionName, parameter } });
@@ -190,10 +219,17 @@ namespace Griesoft.Xamarin.RatingGateway
         }
 
         /// <summary>
-        /// 
+        /// Evaluate through all conditions in the collection and if all necessary conditions are met open the rating page.
         /// </summary>
-        /// <param name="parameters"></param>
-        /// <param name="manipulateOnly"></param>
+        /// <param name="parameters">A collection of unique condition names and optional parameters for them.</param>
+        /// <param name="manipulateOnly">Set to true if the specified conditions should not be prioritized in the actual evaluation phase and be used for manipulation only. The default is false.</param>
+        /// <remarks>
+        /// The evaluation process will first manipulate all conditions that allow implicit manipulation by using their parameterless manipulation method.
+        /// After manipulation, the actual evaluation will happen, and after evaluation has finished all met conditions will be reset which allow automatic reset.
+        /// <para/>
+        /// If the specified conditions are not used for manipulation only, they will be prioritized by the evaluator. This means that the prioritized conditions must be
+        /// met in addition to all prerequisite and required conditions, before evaluating to true.
+        /// </remarks>
         public void RatingActionTriggered(Dictionary<string, object?> parameters, bool manipulateOnly = false)
         {
             ManipulateConditionState(parameters);

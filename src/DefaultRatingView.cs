@@ -2,7 +2,6 @@
 
 namespace Griesoft.Xamarin.RatingGateway
 {
-    /// <inheritdoc/>
     public sealed partial class DefaultRatingView : IRatingView
     {
         /// <inheritdoc/>

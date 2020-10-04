@@ -8,8 +8,14 @@ using Newtonsoft.Json;
 namespace Griesoft.Xamarin.RatingGateway.Cache
 {
     /// <summary>
-    /// 
+    /// A default implementation of <see cref="IRatingConditionCache"/>, which is used by the rating gateway. Condition names and values
+    /// will be deserialized and serialized to JSON and are written to a text file in the app directory of the application.
     /// </summary>
+    /// <remarks>
+    /// Platforms like Android and iOS do automatically backup the contents of the app directory. So if you don't want the system to backup
+    /// your condition cache, you will need to disable it for the file that this cache is using. By default the file name is "RatingConditionCache".
+    /// You may also create a custom implementation of <see cref="IRatingConditionCache"/> and use this default implementation as template.
+    /// </remarks>
     public class DefaultRatingConditionCache : IRatingConditionCache
     {
         private readonly string _conditionCacheFileName;
@@ -23,7 +29,7 @@ namespace Griesoft.Xamarin.RatingGateway.Cache
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="fileName">The name of the file that the cache will use or create if it doesn't exist.</param>
         public DefaultRatingConditionCache(string fileName)
         {
             _conditionCacheFileName = $"{fileName}.txt";

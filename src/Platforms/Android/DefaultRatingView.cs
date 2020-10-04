@@ -6,7 +6,7 @@ using Android.OS;
 namespace Griesoft.Xamarin.RatingGateway
 {
     /// <summary>
-    /// 
+    /// A default rating view implementation for Android.
     /// </summary>
     public sealed partial class DefaultRatingView
     {

@@ -1,0 +1,581 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Griesoft.Xamarin.RatingGateway</name>
+    </assembly>
+    <members>
+        <member name="T:Griesoft.Xamarin.RatingGateway.Cache.ConditionCacheDto">
+            <summary>
+            A data transfer object that is used to save and load a value for a specific condition.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Cache.ConditionCacheDto.ConditionName">
+            <summary>
+            The name of the condition.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Cache.ConditionCacheDto.CurrentValue">
+            <summary>
+            The current value of the condition.
+            </summary>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.Cache.DefaultRatingConditionCache">
+            <summary>
+            A default implementation of <see cref="T:Griesoft.Xamarin.RatingGateway.Cache.IRatingConditionCache"/>, which is used by the rating gateway. Condition names and values
+            will be deserialized and serialized to JSON and are written to a text file in the app directory of the application.
+            </summary>
+            <remarks>
+            Platforms like Android and iOS do automatically backup the contents of the app directory. So if you don't want the system to backup
+            your condition cache, you will need to disable it for the file that this cache is using. By default the file name is "RatingConditionCache".
+            You may also create a custom implementation of <see cref="T:Griesoft.Xamarin.RatingGateway.Cache.IRatingConditionCache"/> and use this default implementation as template.
+            </remarks>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Cache.DefaultRatingConditionCache.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Cache.DefaultRatingConditionCache.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="fileName">The name of the file that the cache will use or create if it doesn't exist.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Cache.DefaultRatingConditionCache.Load(System.String,Griesoft.Xamarin.RatingGateway.Cache.ICachableCondition)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Cache.DefaultRatingConditionCache.Save(System.String,Griesoft.Xamarin.RatingGateway.Cache.ICachableCondition)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Cache.DefaultRatingConditionCache.Delete(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.Cache.ICachableCondition">
+            <summary>
+            An interface which adds caching functionality to a condition when implemented.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Cache.ICachableCondition.CacheCurrentValue">
+            <summary>
+            You can disable caching for this condition instance by setting this property to false.
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Cache.ICachableCondition.ToConditionCacheDto(System.String)">
+            <summary>
+            Creates a cachable data transfer object out of this condition instance.
+            </summary>
+            <param name="conditionName">The unique name for this condition.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Cache.ICachableCondition.ManipulateState(System.Object)">
+            <summary>
+            Manipulate the current value by a specified parameter.
+            </summary>
+            <param name="parameter">The value to use for state manipulation.</param>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.Cache.IRatingConditionCache">
+            <summary>
+            The condition cache that manages the IO related tasks for the rating gateway.
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Cache.IRatingConditionCache.Load(System.String,Griesoft.Xamarin.RatingGateway.Cache.ICachableCondition)">
+            <summary>
+            Load a cached condition state.
+            </summary>
+            <param name="conditionName">The unique name of the condition.</param>
+            <param name="condition">The cachable condition instance which will be populated with the cached state, if one exists.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Cache.IRatingConditionCache.Save(System.String,Griesoft.Xamarin.RatingGateway.Cache.ICachableCondition)">
+            <summary>
+            Save a condition state to cache.
+            </summary>
+            <param name="conditionName">The unique name of the condition.</param>
+            <param name="condition">The cachable condition instance from which the state will be extracted and saved to cache.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Cache.IRatingConditionCache.Delete(System.String)">
+            <summary>
+            Delete the cached state of a condition if it exists.
+            </summary>
+            <param name="conditionName">The unique name of the condition.</param>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.BooleanRatingCondition">
+            <summary>
+            A simple boolean condition that by default evaluates to true when the current state is set to true. 
+            Use it as a switch or to memorize certain events within the lifecycle of your application.
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.BooleanRatingCondition.#ctor">
+            <summary>
+            
+            </summary>
+            <remarks>
+            The initial state for this constructor is false and the evaluator will evaluate to true if the current state is true.
+            </remarks>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.BooleanRatingCondition.#ctor(Griesoft.Xamarin.RatingGateway.ConditionType)">
+            <summary>
+            
+            </summary>
+            <param name="conditionType">Specify the condition type.</param>
+            <remarks>
+            The initial state for this constructor is false and the evaluator will evaluate to true if the current state is true.
+            </remarks>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.BooleanRatingCondition.#ctor(System.Boolean,System.Func{System.Boolean,System.Boolean})">
+            <summary>
+            
+            </summary>
+            <param name="initialState">The initial state of this condition.</param>
+            <param name="evaluator">An evaluator function that determines whether the condition is met or not.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.BooleanRatingCondition.#ctor(System.Boolean,System.Func{System.Boolean,System.Boolean},Griesoft.Xamarin.RatingGateway.ConditionType)">
+            <summary>
+            
+            </summary>
+            <param name="initialState">The initial state of this condition.</param>
+            <param name="evaluator">An evaluator function that determines whether the condition is met or not.</param>
+            <param name="conditionType">Specify the condition type.</param>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.BooleanRatingCondition.CacheCurrentValue">
+            <inheritdoc/>
+            <remarks>By default false.</remarks>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.BooleanRatingCondition.ManipulateState">
+            <summary>
+            Inverts the current state of this condition.
+            </summary>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.CountRatingCondition">
+            <summary>
+            A count condition that by default evaluates to true when the current count has reached the specified goal. Use it to keep count of user events in your application or as a countdown.
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.CountRatingCondition.#ctor(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="initialState">Specify the initial count for this condition.</param>
+            <param name="goal">Specify the count goal for this condition. When the current state is equal of exceeds that goal the condition is met.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.CountRatingCondition.#ctor(System.Int32,System.Int32,Griesoft.Xamarin.RatingGateway.ConditionType)">
+            <summary>
+            
+            </summary>
+            <param name="initialState">Specify the initial count for this condition.</param>
+            <param name="goal">Specify the count goal for this condition. When the current state is equal of exceeds that goal the condition is met.</param>
+            <param name="conditionType">Specify the condition type.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.CountRatingCondition.#ctor(System.Int32,System.Func{System.Int32,System.Boolean})">
+            <summary>
+            
+            </summary>
+            <param name="initialState">Specify the initial count for this condition.</param>
+            <param name="evaluator">An evaluator function that determines when the condition is met.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.CountRatingCondition.#ctor(System.Int32,System.Func{System.Int32,System.Boolean},Griesoft.Xamarin.RatingGateway.ConditionType)">
+            <summary>
+            
+            </summary>
+            <param name="initialState">Specify the initial count for this condition.</param>
+            <param name="evaluator">An evaluator function that determines when the condition is met.</param>
+            <param name="conditionType">Specify the condition type.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.CountRatingCondition.ManipulateState">
+            <summary>
+            Increase the current count of this condition by one.
+            </summary>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.DateTimeExpiredCondition">
+            <summary>
+            A condition that will evaluate to true after a specific moment in time is in the past. 
+            Use it to wait for a certain amount of time before asking the user to review your application, for example.
+            </summary>
+            <remarks>
+            By caching the current state of this condition, the loading process of cached values will set the current state to the same
+            state that it was when the condition was added the first time.
+            </remarks>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.DateTimeExpiredCondition.#ctor(System.TimeSpan)">
+            <summary>
+            
+            </summary>
+            <param name="timeFromNowUtc">The amount of time to add to <see cref="P:System.DateTime.UtcNow"/> when setting the initial state of this condition.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.DateTimeExpiredCondition.#ctor(System.TimeSpan,Griesoft.Xamarin.RatingGateway.ConditionType)">
+            <summary>
+            
+            </summary>
+            <param name="timeFromNowUtc">The amount of time to add to <see cref="P:System.DateTime.UtcNow"/> when setting the initial state of this condition.</param>
+            <param name="conditionType">Specify the condition type.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.DateTimeExpiredCondition.Reset">
+            <summary>
+            Reset will add the amount of time that was passed to the constructor of this condition to <see cref="P:System.DateTime.UtcNow"/> and set the result as current state.
+            </summary>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.RatingCondition`1">
+            <summary>
+            A generic condition that enables you to create custom conditions with minimal effort.
+            </summary>
+            <remarks>
+            If you need custom manipulation or reset logic, or if you want to add more complex functionality that the build-in conditions don't provide, 
+            you should write a custom condition and inherit from the condition base class <see cref="T:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1"/>.
+            </remarks>
+            <typeparam name="TConditionType"></typeparam>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingCondition`1.#ctor(`0,System.Func{`0,System.Boolean})">
+            <summary>
+            
+            </summary>
+            <param name="initialState">Specify the initial value for this condition.</param>
+            <param name="evaluator">An evaluator function that determines when the condition is met.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingCondition`1.#ctor(`0,System.Func{`0,System.Boolean},Griesoft.Xamarin.RatingGateway.ConditionType)">
+            <summary>
+            
+            </summary>
+            <param name="initialState">Specify the initial value for this condition.</param>
+            <param name="evaluator">An evaluator function that determines when the condition is met.</param>
+            <param name="conditionType">Specify the condition type.</param>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1">
+            <summary>
+            The base class for a condition with an default implementation of the <see cref="T:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition"/> interface. Use it to easily create custom conditions.
+            </summary>
+            <typeparam name="TConditionType">The type that this condition is dedicated to store, manipulate and evaluate.</typeparam>
+            <remarks>
+            If you need custom manipulation or reset logic, or if you want to add more complex functionality that the build-in conditions don't provide, 
+            you should write a custom condition and inherit from this abstract base class.
+            </remarks>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.#ctor(`0,System.Func{`0,System.Boolean})">
+            <summary>
+            
+            </summary>
+            <param name="initialState">The initial state of this condition.</param>
+            <param name="evaluator">An evaluator function that determines whether a condition is met or not.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.#ctor(`0,System.Func{`0,System.Boolean},Griesoft.Xamarin.RatingGateway.ConditionType)">
+            <summary>
+            
+            </summary>
+            <param name="initialState">The initial state of this condition.</param>
+            <param name="evaluator">An evaluator function that determines whether a condition is met or not.</param>
+            <param name="conditionType">Specify the condition type.</param>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.InitialState">
+            <summary>
+            The initial state of the condition.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.CurrentState">
+            <summary>
+            The current state of the condition.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.ResetAfterConditionMet">
+            <inheritdoc/>
+            <remarks>By default true.</remarks>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.ExplicitManipulationOnly">
+            <inheritdoc/>
+            <remarks>By default false.</remarks>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.DisallowParamaterlessManipulation">
+            <inheritdoc/>
+            <remarks>By default false.</remarks>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.ConditionType">
+            <inheritdoc/>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.IsConditionMet">
+            <inheritdoc/>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.CacheCurrentValue">
+            <inheritdoc/>
+            <remarks>By default true.</remarks>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.ManipulateState(System.Object)">
+            <summary>
+            Sets the current state to the specified value if it can be cast to <typeparamref name="TConditionType"/>.
+            </summary>
+            <param name="parameter">The value to set as the new current state.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.ManipulateState">
+            <inheritdoc/>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.Reset">
+            <summary>
+            Reset the current state to the initial state.
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.ToConditionCacheDto(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition">
+            <summary>
+            The interface that a condition should implement for usage with the <see cref="T:Griesoft.Xamarin.RatingGateway.RatingGateway"/>.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition.ResetAfterConditionMet">
+            <summary>
+            If set to false the evaluation process will not reset the value of a condition to its initial value after <see cref="P:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition.IsConditionMet"/> is true.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition.ExplicitManipulationOnly">
+            <summary>
+            Set to true to tell the evaluation process to only manipulate the current state if you explicitly tell it to do so. 
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition.DisallowParamaterlessManipulation">
+            <summary>
+            Set to true to tell the evaluation process that parameterless manipulation is forbidden.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition.ConditionType">
+            <summary>
+            The type of the condition, which specifies how the evaluation process will handle it.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition.IsConditionMet">
+            <summary>
+            True if the goal of the condition is met.
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition.Reset">
+            <summary>
+            Reset the current value of the condition.
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition.ManipulateState">
+            <summary>
+            Manipulate the current state by a predefined constant factor. The default implementation of this method does nothing.
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition.ManipulateState(System.Object)">
+            <summary>
+            Manipulate the current value by a specified parameter.
+            </summary>
+            <param name="parameter">The value to use for state manipulation.</param>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.StringMatchCondition">
+            <summary>
+            This condition evaluates to true when the current state matches the string that was passed to the constructor as the goal. 
+            Use it to match user input or other system generated strings before prompting the user to review your application.
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.StringMatchCondition.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="goal">The string that the current state needs to match in order for this condition to evaluate to true.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.StringMatchCondition.#ctor(System.String,Griesoft.Xamarin.RatingGateway.ConditionType)">
+            <summary>
+            
+            </summary>
+            <param name="goal">The string that the current state needs to match in order for this condition to evaluate to true.</param>
+            <param name="conditionType">Specify the condition type.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.StringMatchCondition.#ctor(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="goal">The string that the current state needs to match in order for this condition to evaluate to true.</param>
+            <param name="initialString">The initial string for this condition.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.StringMatchCondition.#ctor(System.String,System.String,Griesoft.Xamarin.RatingGateway.ConditionType)">
+            <summary>
+            
+            </summary>
+            <param name="goal">The string that the current state needs to match in order for this condition to evaluate to true.</param>
+            <param name="initialString">The initial string for this condition.</param>
+            <param name="conditionType">Specify the condition type.</param>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.DefaultRatingView">
+            <summary>
+            A default rating view implementation for iOS.
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.DefaultRatingView.TryOpenRatingPage">
+            <inheritdoc/>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.ConditionType">
+            <summary>
+            Describes the type of the condition, which affects the way how it will be evaluated.
+            </summary>
+        </member>
+        <member name="F:Griesoft.Xamarin.RatingGateway.ConditionType.Standard">
+            <summary>
+            A standard condition which has no special role over other conditions.
+            </summary>
+        </member>
+        <member name="F:Griesoft.Xamarin.RatingGateway.ConditionType.Prerequisite">
+            <summary>
+            A prerequisite condition will be always evaluated first before other condition types.
+            </summary>
+            <remarks>
+            A prerequisite is never enough to satisfy the evaluation process alone. So make sure that you add another type of condition
+            to the collection or consider making it a <see cref="F:Griesoft.Xamarin.RatingGateway.ConditionType.Requirement"/>.
+            </remarks>
+        </member>
+        <member name="F:Griesoft.Xamarin.RatingGateway.ConditionType.Requirement">
+            <summary>
+            A requirement is a condition which is always required when evaluating. It is evaluated after <see cref="F:Griesoft.Xamarin.RatingGateway.ConditionType.Prerequisite"/> conditions.
+            </summary>
+            <remarks>
+            The required conditions are always evaluated after <see cref="F:Griesoft.Xamarin.RatingGateway.ConditionType.Prerequisite"/> conditions and differ from them only in the way that they are
+            enough to satisfy the evaluation process, where the prerequisite conditions do not.
+            </remarks>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.IRatingView">
+            <summary>
+            The interface for a view which is responsible to prompt the user to review the application.
+            </summary>
+            <remarks>
+            By default the rating gateway uses the default implementation <see cref="T:Griesoft.Xamarin.RatingGateway.DefaultRatingView"/>, but you can also create
+            your own implementation for one or multiple platforms that you are using this package on.
+            </remarks>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.IRatingView.TryOpenRatingPage">
+            <summary>
+            Try to open the review page for your application.
+            </summary>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.RatingGateway">
+            <summary>
+            The rating gateway manages when a <see cref="T:Griesoft.Xamarin.RatingGateway.IRatingView"/> should open a rating page, based on a <see cref="T:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition"/> collection. The gateway is
+            a singleton service and you should initialize the service with one of the initialize methods <see cref="M:Griesoft.Xamarin.RatingGateway.RatingGateway.Initialize(System.String,Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition,Griesoft.Xamarin.RatingGateway.IRatingView,Griesoft.Xamarin.RatingGateway.Cache.IRatingConditionCache)"/>
+            <see cref="M:Griesoft.Xamarin.RatingGateway.RatingGateway.Initialize(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition}},Griesoft.Xamarin.RatingGateway.IRatingView,Griesoft.Xamarin.RatingGateway.Cache.IRatingConditionCache)"/>.
+            <para/>
+            After initialization, you can access the service via the <see cref="P:Griesoft.Xamarin.RatingGateway.RatingGateway.Current"/> property.
+            </summary>
+            <remarks>
+            Each time a rating action is triggered the gateway will manipulate conditions by given factors, evaluate through them to check if all necessary conditions are met,
+            reset met conditions if allowed, and cache the current state of cachable conditions.
+            </remarks>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.RatingGateway.RatingConditions">
+            <summary>
+            The condition collection returned as an enumerable.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.RatingGateway.HasPrerequisiteConditions">
+            <summary>
+            True if the condition collection contains any condition that is of type <see cref="F:Griesoft.Xamarin.RatingGateway.ConditionType.Prerequisite"/>.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.RatingGateway.HasRequiredConditions">
+            <summary>
+            True if the condition collection contains any condition that is of type <see cref="F:Griesoft.Xamarin.RatingGateway.ConditionType.Requirement"/>.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.RatingGateway.HasOnlyPrerequisiteConditions">
+            <summary>
+            True if the condition collection contains only conditions that are of type <see cref="F:Griesoft.Xamarin.RatingGateway.ConditionType.Prerequisite"/>.
+            </summary>
+            <remarks>
+            Make sure that this always returns false. If it doesn't, the rating gateway will never prompt the user to review your application. 
+            </remarks>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.RatingGateway.RatingView">
+            <summary>
+            The rating view that does display the rating page to the user.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.RatingGateway.RatingConditionCache">
+            <summary>
+            The rating condition cache that does manage the reading and writing of cached values to the file system.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.RatingGateway.Current">
+            <summary>
+            The singleton instance of this rating gateway. Returns null if the service was not initialized on application startup.
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.Initialize(System.String,Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition,Griesoft.Xamarin.RatingGateway.IRatingView,Griesoft.Xamarin.RatingGateway.Cache.IRatingConditionCache)">
+            <summary>
+            Initialize the rating gateway with a single condition.
+            </summary>
+            <param name="conditionName">The unique name of the condition.</param>
+            <param name="condition">The condition instance that will be added to the collection.</param>
+            <param name="ratingView">Optional; pass a custom rating view. If not specified or null, <see cref="T:Griesoft.Xamarin.RatingGateway.DefaultRatingView"/> will be used instead.</param>
+            <param name="ratingCache">Optional; pass a custom condition cache. If not specified or null, <see cref="T:Griesoft.Xamarin.RatingGateway.Cache.DefaultRatingConditionCache"/> will be used instead.</param>
+            <exception cref="T:System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.Initialize(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition}},Griesoft.Xamarin.RatingGateway.IRatingView,Griesoft.Xamarin.RatingGateway.Cache.IRatingConditionCache)">
+            <summary>
+            Initialize the rating gateway with a collection of conditions.
+            </summary>
+            <param name="conditions">A collection of key value pairs where the key will be used as the unique condition name and the value is added to the condition collection.</param>
+            <param name="ratingView">Optional; pass a custom rating view. If not specified or null, <see cref="T:Griesoft.Xamarin.RatingGateway.DefaultRatingView"/> will be used instead.</param>
+            <param name="ratingCache">Optional; pass a custom condition cache. If not specified or null, <see cref="T:Griesoft.Xamarin.RatingGateway.Cache.DefaultRatingConditionCache"/> will be used instead.</param>
+            <exception cref="T:System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.AddCondition(System.String,Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition)">
+            <summary>
+            Add a condition to the collection.
+            </summary>
+            <param name="conditionName">The unique name of the condition.</param>
+            <param name="condition">The condition instance that will be added to the collection.</param>
+            <exception cref="T:System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.AddCondition(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition}})">
+            <summary>
+            Add multiple conditions to the collection at once.
+            </summary>
+            <param name="conditions">A collection of key-value pairs where the key is used as the unique condition name and the value is added to the condition collection.</param>
+            <exception cref="T:System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.RemoveCondition(System.String,System.Boolean)">
+            <summary>
+            Remove a condition with the specified name from the collection if it exists.
+            </summary>
+            <param name="conditionName">The unique name of the condition.</param>
+            <param name="removeFromCache">If true a cached state of the condition will also be removed from the cache. By default true.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.ResetAllConditions">
+            <summary>
+            Reset all condition states in the collection.
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.RatingActionTriggered">
+            <summary>
+            Evaluate through all conditions in the collection and if all necessary conditions are met open the rating page.
+            </summary>
+            <remarks>
+            The evaluation process will first manipulate all conditions that allow implicit manipulation by using their parameterless manipulation method.
+            After manipulation, the actual evaluation will happen, and after evaluation has finished all met conditions will be reset which allow automatic reset.
+            </remarks>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.RatingActionTriggered(System.String,System.Object,System.Boolean)">
+            <summary>
+            Evaluate through all conditions in the collection and if all necessary conditions are met open the rating page.
+            </summary>
+            <param name="conditionName">The unique name of the condition that should be prioritized.</param>
+            <param name="parameter">An optional parameter that will be passed to the manipulation process for the specified condition.</param>
+            <param name="manipulateOnly">Set to true if the specified condition should not be prioritized in the actual evaluation phase and be used for manipulation only. The default is false.</param>
+            <remarks>
+            The evaluation process will first manipulate all conditions that allow implicit manipulation by using their parameterless manipulation method.
+            After manipulation, the actual evaluation will happen, and after evaluation has finished all met conditions will be reset which allow automatic reset.
+            <para/>
+            If the specified condition is not used for manipulation only, it will be prioritized by the evaluator. This means that the prioritized condition must be
+            met in addition to all prerequisite and required conditions, before evaluating to true.
+            </remarks>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.RatingActionTriggered(System.Collections.Generic.Dictionary{System.String,System.Object},System.Boolean)">
+            <summary>
+            Evaluate through all conditions in the collection and if all necessary conditions are met open the rating page.
+            </summary>
+            <param name="parameters">A collection of unique condition names and optional parameters for them.</param>
+            <param name="manipulateOnly">Set to true if the specified conditions should not be prioritized in the actual evaluation phase and be used for manipulation only. The default is false.</param>
+            <remarks>
+            The evaluation process will first manipulate all conditions that allow implicit manipulation by using their parameterless manipulation method.
+            After manipulation, the actual evaluation will happen, and after evaluation has finished all met conditions will be reset which allow automatic reset.
+            <para/>
+            If the specified conditions are not used for manipulation only, they will be prioritized by the evaluator. This means that the prioritized conditions must be
+            met in addition to all prerequisite and required conditions, before evaluating to true.
+            </remarks>
+        </member>
+    </members>
+</doc>
