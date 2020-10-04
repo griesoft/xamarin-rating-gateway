@@ -225,6 +225,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         {
             // Arrange
             var cacheStub = new Mock<IRatingConditionCache>();
+            cacheStub.Setup(cache => cache.Load(It.IsAny<string>(), It.IsAny<ICachableCondition>())).Returns(true);
             var ratingGateway = new RatingGateway()
             {
                 RatingConditionCache = cacheStub.Object
@@ -282,6 +283,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         {
             // Arrange
             var cacheStub = new Mock<IRatingConditionCache>();
+            cacheStub.Setup(cache => cache.Load(It.IsAny<string>(), It.IsAny<ICachableCondition>())).Returns(true);
             var ratingGateway = new RatingGateway()
             {
                 RatingConditionCache = cacheStub.Object
@@ -605,6 +607,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             // Arrange
             var ratingViewStub = new Mock<IRatingView>();
             var cacheStub = new Mock<IRatingConditionCache>();
+            cacheStub.Setup(cache => cache.Load(It.IsAny<string>(), It.IsAny<ICachableCondition>())).Returns(true);
             var ratingGateway = new RatingGateway()
             {
                 RatingView = ratingViewStub.Object,
