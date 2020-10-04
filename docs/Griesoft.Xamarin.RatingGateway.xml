@@ -546,7 +546,7 @@
             Reset all condition states in the collection.
             </summary>
         </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.RatingActionTriggered">
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.Evaluate">
             <summary>
             Evaluate through all conditions in the collection and if all necessary conditions are met open the rating page.
             </summary>
@@ -555,7 +555,7 @@
             After manipulation, the actual evaluation will happen, and after evaluation has finished all met conditions will be reset which allow automatic reset.
             </remarks>
         </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.RatingActionTriggered(System.String,System.Object,System.Boolean)">
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.Evaluate(System.String,System.Object,System.Boolean)">
             <summary>
             Evaluate through all conditions in the collection and if all necessary conditions are met open the rating page.
             </summary>
@@ -570,7 +570,7 @@
             met in addition to all prerequisite and required conditions, before evaluating to true.
             </remarks>
         </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.RatingActionTriggered(System.Collections.Generic.Dictionary{System.String,System.Object},System.Boolean)">
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.Evaluate(System.Collections.Generic.Dictionary{System.String,System.Object},System.Boolean)">
             <summary>
             Evaluate through all conditions in the collection and if all necessary conditions are met open the rating page.
             </summary>

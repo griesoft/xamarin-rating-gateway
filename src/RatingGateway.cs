@@ -184,7 +184,7 @@ namespace Griesoft.Xamarin.RatingGateway
         /// The evaluation process will first manipulate all conditions that allow implicit manipulation by using their parameterless manipulation method.
         /// After manipulation, the actual evaluation will happen, and after evaluation has finished all met conditions will be reset which allow automatic reset.
         /// </remarks>
-        public void RatingActionTriggered()
+        public void Evaluate()
         {
             ManipulateConditionState(null);
 
@@ -209,7 +209,7 @@ namespace Griesoft.Xamarin.RatingGateway
         /// If the specified condition is not used for manipulation only, it will be prioritized by the evaluator. This means that the prioritized condition must be
         /// met in addition to all prerequisite and required conditions, before evaluating to true.
         /// </remarks>
-        public void RatingActionTriggered(string conditionName, object? parameter = default, bool manipulateOnly = false)
+        public void Evaluate(string conditionName, object? parameter = default, bool manipulateOnly = false)
         {
             ManipulateConditionState(new Dictionary<string, object?>() { { conditionName, parameter } });
 
@@ -233,7 +233,7 @@ namespace Griesoft.Xamarin.RatingGateway
         /// If the specified conditions are not used for manipulation only, they will be prioritized by the evaluator. This means that the prioritized conditions must be
         /// met in addition to all prerequisite and required conditions, before evaluating to true.
         /// </remarks>
-        public void RatingActionTriggered(Dictionary<string, object?> parameters, bool manipulateOnly = false)
+        public void Evaluate(Dictionary<string, object?> parameters, bool manipulateOnly = false)
         {
             ManipulateConditionState(parameters);
 

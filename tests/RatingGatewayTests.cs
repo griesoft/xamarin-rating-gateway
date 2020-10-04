@@ -263,11 +263,11 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             // Act
             if (key == null)
             {
-                gateway.RatingActionTriggered();
+                gateway.Evaluate();
             }
             else
             {
-                gateway.RatingActionTriggered(new Dictionary<string, object?>()
+                gateway.Evaluate(new Dictionary<string, object?>()
                 {
                     { key, param }
                 });
@@ -290,12 +290,12 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             ratingGateway.AddCondition("test2", new CountRatingCondition(0, 3));
 
             // Act
-            ratingGateway.RatingActionTriggered(new Dictionary<string, object?>()
+            ratingGateway.Evaluate(new Dictionary<string, object?>()
             {
                 { "test", null },
                 { "test2", null }
             });
-            ratingGateway.RatingActionTriggered(new Dictionary<string, object?>()
+            ratingGateway.Evaluate(new Dictionary<string, object?>()
             {
                 { "test", false },
                 { "test2", 1 }
@@ -317,7 +317,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test", new BooleanRatingCondition(ConditionType.Prerequisite));
 
             // Act
-            gateway.RatingActionTriggered();
+            gateway.Evaluate();
 
             // Assert
             ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Never);
@@ -336,7 +336,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test2", new BooleanRatingCondition());
 
             // Act
-            gateway.RatingActionTriggered();
+            gateway.Evaluate();
 
             // Assert
             ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Never);
@@ -355,7 +355,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test2", new BooleanRatingCondition());
 
             // Act
-            gateway.RatingActionTriggered();
+            gateway.Evaluate();
 
             // Assert
             ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Once);
@@ -374,7 +374,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test2", new CountRatingCondition(0, 5) { CacheCurrentValue = false });
 
             // Act
-            gateway.RatingActionTriggered();
+            gateway.Evaluate();
 
             // Assert
             ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Never);
@@ -393,7 +393,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test2", new CountRatingCondition(0, 5, ConditionType.Requirement) { CacheCurrentValue = false });
 
             // Act
-            gateway.RatingActionTriggered();
+            gateway.Evaluate();
 
             // Assert
             ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Never);
@@ -412,7 +412,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test2", new CountRatingCondition(0, 5, ConditionType.Requirement) { CacheCurrentValue = false });
 
             // Act
-            gateway.RatingActionTriggered();
+            gateway.Evaluate();
 
             // Assert
             ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Never);
@@ -431,7 +431,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test2", new CountRatingCondition(0, 5) { CacheCurrentValue = false });
 
             // Act
-            gateway.RatingActionTriggered();
+            gateway.Evaluate();
 
             // Assert
             ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Once);
@@ -450,7 +450,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test2", new CountRatingCondition(0, 5) { CacheCurrentValue = false });
 
             // Act
-            gateway.RatingActionTriggered("test2");
+            gateway.Evaluate("test2");
 
             // Assert
             ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Never);
@@ -469,7 +469,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test2", new CountRatingCondition(0, 5) { CacheCurrentValue = false });
 
             // Act
-            gateway.RatingActionTriggered("test2");
+            gateway.Evaluate("test2");
 
             // Assert
             ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Never);
@@ -489,7 +489,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test3", new BooleanRatingCondition());
 
             // Act
-            gateway.RatingActionTriggered(new Dictionary<string, object?>()
+            gateway.Evaluate(new Dictionary<string, object?>()
             {
                 { "test", null },
                 { "test2", null }
@@ -513,7 +513,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test3", new BooleanRatingCondition());
 
             // Act
-            gateway.RatingActionTriggered("random");
+            gateway.Evaluate("random");
 
             // Assert
             ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Never);
@@ -532,7 +532,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test2", new CountRatingCondition(0, 10) { CacheCurrentValue = false });
 
             // Act
-            gateway.RatingActionTriggered();
+            gateway.Evaluate();
 
             // Assert
             ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Never);
@@ -551,7 +551,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test2", new BooleanRatingCondition());
 
             // Act
-            gateway.RatingActionTriggered();
+            gateway.Evaluate();
 
             // Assert
             ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Once);
@@ -570,7 +570,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test2", new BooleanRatingCondition());
 
             // Act
-            gateway.RatingActionTriggered("test", 3, true);
+            gateway.Evaluate("test", 3, true);
 
             // Assert
             ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Once);
@@ -591,7 +591,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test2", condition2);
 
             // Act
-            gateway.RatingActionTriggered();
+            gateway.Evaluate();
 
             // Assert
             ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Once);
@@ -614,7 +614,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             ratingGateway.AddCondition("test2", new CountRatingCondition(0, 1));
 
             // Act
-            ratingGateway.RatingActionTriggered(new Dictionary<string, object?>()
+            ratingGateway.Evaluate(new Dictionary<string, object?>()
             {
                 { "test", null },
                 { "test2", null }
@@ -643,7 +643,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             gateway.AddCondition("test2", condition2);
 
             // Act
-            gateway.RatingActionTriggered();
+            gateway.Evaluate();
 
             // Assert
             ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Once);
