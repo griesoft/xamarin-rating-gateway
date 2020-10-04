@@ -129,7 +129,10 @@ namespace Griesoft.Xamarin.RatingGateway
 
             if (condition is ICachableCondition cachableCondition && cachableCondition.CacheCurrentValue)
             {
-                RatingConditionCache.Load(conditionName, cachableCondition);
+                if (!RatingConditionCache.Load(conditionName, cachableCondition))
+                {
+                    RatingConditionCache.Save(conditionName, cachableCondition);
+                }
             }
         }
 

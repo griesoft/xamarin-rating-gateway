@@ -10,7 +10,8 @@
         /// </summary>
         /// <param name="conditionName">The unique name of the condition.</param>
         /// <param name="condition">The cachable condition instance which will be populated with the cached state, if one exists.</param>
-        void Load(string conditionName, ICachableCondition condition);
+        /// <returns>True if loading a value from cache was successful.</returns>
+        bool Load(string conditionName, ICachableCondition condition);
 
         /// <summary>
         /// Save a condition state to cache.

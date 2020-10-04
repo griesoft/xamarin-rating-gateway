@@ -122,6 +122,33 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
+        public void AddCondition_ShouldSave_WhenLoad_ReturnsFalse()
+        {
+            // Arrange
+            var cacheStub = new Mock<IRatingConditionCache>();
+            cacheStub.Setup(cache => cache.Load("test2", It.IsAny<ICachableCondition>())).Returns(false);
+            cacheStub.Setup(cache => cache.Load("test4", It.IsAny<ICachableCondition>())).Returns(true);
+            var ratingGateway = new RatingGateway()
+            {
+                RatingConditionCache = cacheStub.Object
+            };
+
+            // Act
+            ratingGateway.AddCondition("test", new BooleanRatingCondition());
+            ratingGateway.AddCondition("test2", new CountRatingCondition(0, 3));
+            ratingGateway.AddCondition(new Dictionary<string, IRatingCondition>()
+            {
+                { "test3", new BooleanRatingCondition() },
+                { "test4", new CountRatingCondition(0, 3) }
+            });
+
+            // Assert
+            Assert.Equal(4, ratingGateway.RatingConditions.Count());
+            cacheStub.Verify(cache => cache.Load(It.IsAny<string>(), It.IsAny<ICachableCondition>()), Times.Exactly(2));
+            cacheStub.Verify(cache => cache.Save(It.IsAny<string>(), It.IsAny<ICachableCondition>()), Times.Once);
+        }
+
+        [Fact]
         public void RemoveCondition_IsSuccessful()
         {
             // Arrange

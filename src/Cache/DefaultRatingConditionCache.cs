@@ -41,16 +41,18 @@ namespace Griesoft.Xamarin.RatingGateway.Cache
         }
 
         /// <inheritdoc/>
-        public void Load(string conditionName, ICachableCondition condition)
+        public bool Load(string conditionName, ICachableCondition condition)
         {
             var cachedValueDto = _lazyConditionCacheDtos.Value.FirstOrDefault(dto => dto.ConditionName == conditionName);
 
             if (cachedValueDto == null || cachedValueDto.CurrentValue == null)
             {
-                return;
+                return false;
             }
 
             condition.ManipulateState(cachedValueDto.CurrentValue);
+
+            return true;
         }
 
         /// <inheritdoc/>

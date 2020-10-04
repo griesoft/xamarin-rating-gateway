@@ -84,6 +84,7 @@
             </summary>
             <param name="conditionName">The unique name of the condition.</param>
             <param name="condition">The cachable condition instance which will be populated with the cached state, if one exists.</param>
+            <returns>True if loading a value from cache was successful.</returns>
         </member>
         <member name="M:Griesoft.Xamarin.RatingGateway.Cache.IRatingConditionCache.Save(System.String,Griesoft.Xamarin.RatingGateway.Cache.ICachableCondition)">
             <summary>
@@ -311,6 +312,12 @@
         </member>
         <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.ToConditionCacheDto(System.String)">
             <inheritdoc/>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.ManipulateState(`0)">
+            <summary>
+            Manipulate by setting the current state to the given <paramref name="parameter"/>.
+            </summary>
+            <param name="parameter">The parameter that will be the new current state.</param>
         </member>
         <member name="T:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition">
             <summary>
