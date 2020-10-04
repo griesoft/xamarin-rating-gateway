@@ -249,7 +249,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         [InlineData(null, null, false, false, 1)]
         [InlineData(null, 5, true, false, 0)]
         [InlineData(null, 8, false, false, 1)]
-        public void RatingActionTriggered_DoesManipulate_AsExpected(string? key, int? param, bool explicitOnly, bool disallowParameterless, int expected)
+        public void Evaluate_DoesManipulate_AsExpected(string? key, int? param, bool explicitOnly, bool disallowParameterless, int expected)
         {
             // Arrange
             var condition = new CountRatingCondition(0, 10)
@@ -279,7 +279,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_ManipulateShould_SaveStateOfCachables()
+        public void Evaluate_ManipulateShould_SaveStateOfCachables()
         {
             // Arrange
             var cacheStub = new Mock<IRatingConditionCache>();
@@ -308,7 +308,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_EvaluateFailsWhen_HasOnlyPrerequisites()
+        public void Evaluate_FailsWhen_HasOnlyPrerequisites()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
@@ -326,7 +326,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_EvaluateFailsWhen_PrerequisitesNotMet()
+        public void Evaluate_FailsWhen_PrerequisitesNotMet()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
@@ -345,7 +345,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_EvaluateSucceedsWhen_PrerequisitesAndStandardConditionsMet()
+        public void Evaluate_SucceedsWhen_PrerequisitesAndStandardConditionsMet()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
@@ -364,7 +364,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_EvaluateFailsWhen_PrerequisitesMetButStandardConditionNot()
+        public void Evaluate_FailsWhen_PrerequisitesMetButStandardConditionNot()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
@@ -383,7 +383,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_EvaluateFailsWhen_RequiredConditionsNotMet()
+        public void Evaluate_FailsWhen_RequiredConditionsNotMet()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
@@ -402,7 +402,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_EvaluateFailsWhen_NotAllRequiredMed()
+        public void Evaluate_FailsWhen_NotAllRequiredMed()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
@@ -421,7 +421,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_EvaluateSucceedsWhen_RequiredMetAndNoPrioritySpecified()
+        public void Evaluate_SucceedsWhen_RequiredMetAndNoPrioritySpecified()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
@@ -440,7 +440,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_EvaluateFailsWhen_RequiredMetAndPrioritySpecified()
+        public void Evaluate_FailsWhen_RequiredMetAndPrioritySpecified()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
@@ -459,7 +459,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_EvaluateFailsWhen_PriorityNotMet()
+        public void Evaluate_FailsWhen_PriorityNotMet()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
@@ -478,7 +478,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_EvaluateFailsWhen_NotAllPrioritysAreMet()
+        public void Evaluate_FailsWhen_NotAllPrioritysAreMet()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
@@ -502,7 +502,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_EvaluateFailsWhen_PriorityDoesNotExist()
+        public void Evaluate_FailsWhen_PriorityDoesNotExist()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
@@ -522,7 +522,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_EvaluateFailsWhen_NoConditionMet()
+        public void Evaluate_FailsWhen_NoConditionMet()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
@@ -541,7 +541,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_EvaluateSucceedsWhen_AnyConditionIsMet()
+        public void Evaluate_SucceedsWhen_AnyConditionIsMet()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
@@ -560,7 +560,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_ManipulationOnlyDoes_EvaluateWithoutPriorityCondition()
+        public void Evaluate_ManipulationOnlyDoes_EvaluateWithoutPriorityCondition()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
@@ -579,7 +579,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_DoesResetAllMetConditions()
+        public void Evaluate_DoesResetAllMetConditions()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
@@ -602,7 +602,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_ResetAllMetConditionsShould_SaveStateOfCachables()
+        public void Evaluate_ResetAllMetConditionsShould_SaveStateOfCachables()
         {
             // Arrange
             var ratingViewStub = new Mock<IRatingView>();
@@ -629,7 +629,7 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
         }
 
         [Fact]
-        public void RatingActionTriggered_DoesResetAll_ExceptStrictlyForbiddenOnes()
+        public void Evaluate_DoesResetAllMetConditions_ExceptStrictlyForbiddenOnes()
         {
             // Arrange
             var ratingViewMock = new Mock<IRatingView>();
