@@ -55,6 +55,10 @@ namespace Griesoft.Xamarin.RatingGateway.Conditions
         public bool ResetAfterConditionMet { get; set; } = true;
 
         /// <inheritdoc/>
+        /// <remarks>By default true.</remarks>
+        public bool ResetOnlyOnEvaluationSuccess { get; set; } = true;
+
+        /// <inheritdoc/>
         /// <remarks>By default false.</remarks>
         public bool ExplicitManipulationOnly { get; set; } = false;
 

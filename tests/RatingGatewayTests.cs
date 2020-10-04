@@ -653,5 +653,35 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             Assert.Equal(0, condition1.CurrentState);
             Assert.True(condition2.CurrentState);
         }
+
+        [Fact]
+        public void Evaluate_ResetOnlyWhen_EvaluationSuccess()
+        {
+            // Arrange
+            var ratingViewMock = new Mock<IRatingView>();
+            var gateway = new RatingGateway
+            {
+                RatingView = ratingViewMock.Object
+            };
+            var condition1 = new CountRatingCondition(0, 2, ConditionType.Requirement) { CacheCurrentValue = false };
+            var condition2 = new CountRatingCondition(0, 1, ConditionType.Requirement) 
+            { 
+                CacheCurrentValue = false, 
+                ResetOnlyOnEvaluationSuccess = false
+            };
+            var condition3 = new CountRatingCondition(0, 1, ConditionType.Requirement) { CacheCurrentValue = false };
+            gateway.AddCondition("test", condition1);
+            gateway.AddCondition("test2", condition2);
+            gateway.AddCondition("test3", condition3);
+
+            // Act
+            gateway.Evaluate();
+
+            // Assert
+            ratingViewMock.Verify(view => view.TryOpenRatingPage(), Times.Never);
+            Assert.Equal(1, condition1.CurrentState);
+            Assert.Equal(0, condition2.CurrentState);
+            Assert.Equal(1, condition3.CurrentState);
+        }
     }
 }

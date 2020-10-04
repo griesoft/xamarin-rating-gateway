@@ -188,12 +188,14 @@ namespace Griesoft.Xamarin.RatingGateway
         {
             ManipulateConditionState(null);
 
-            if (EvaluateConditions())
+            var evaluationResult = EvaluateConditions();
+
+            if (evaluationResult)
             {
                 RatingView.TryOpenRatingPage();
             }
 
-            ResetAllMetConditions();
+            ResetAllMetConditions(evaluationResult);
         }
 
         /// <summary>
@@ -213,12 +215,14 @@ namespace Griesoft.Xamarin.RatingGateway
         {
             ManipulateConditionState(new Dictionary<string, object?>() { { conditionName, parameter } });
 
-            if (EvaluateConditions(manipulateOnly ? null : new List<string>() { conditionName }))
+            var evaluationResult = EvaluateConditions(manipulateOnly ? null : new List<string>() { conditionName });
+
+            if (evaluationResult)
             {
                 RatingView.TryOpenRatingPage();
             }
 
-            ResetAllMetConditions();
+            ResetAllMetConditions(evaluationResult);
         }
 
         /// <summary>
@@ -237,12 +241,14 @@ namespace Griesoft.Xamarin.RatingGateway
         {
             ManipulateConditionState(parameters);
 
-            if (EvaluateConditions(manipulateOnly ? null : parameters?.Keys))
+            var evaluationResult = EvaluateConditions(manipulateOnly ? null : parameters?.Keys);
+
+            if (evaluationResult)
             {
                 RatingView.TryOpenRatingPage();
             }
 
-            ResetAllMetConditions();
+            ResetAllMetConditions(evaluationResult);
         }
 
         private static RatingGateway CreateNewGatewayInstance()
@@ -255,10 +261,15 @@ namespace Griesoft.Xamarin.RatingGateway
             return Current;
         }
 
-        private void ResetAllMetConditions()
+        private void ResetAllMetConditions(bool evaluationResult)
         {
             foreach(var condition in _ratingConditions.Where(con => con.Value.ResetAfterConditionMet && con.Value.IsConditionMet))
             {
+                if (condition.Value.ResetOnlyOnEvaluationSuccess && !evaluationResult)
+                {
+                    continue;
+                }
+
                 condition.Value.Reset();
 
                 SaveCachableConditionState(condition.Key, condition.Value);

@@ -11,6 +11,11 @@
         bool ResetAfterConditionMet { get; set; }
 
         /// <summary>
+        /// If set to true the evaluation process will only reset the met condition if evaluation returned true.
+        /// </summary>
+        bool ResetOnlyOnEvaluationSuccess { get; set; }
+
+        /// <summary>
         /// Set to true to tell the evaluation process to only manipulate the current state if you explicitly tell it to do so. 
         /// </summary>
         bool ExplicitManipulationOnly { get; set; }

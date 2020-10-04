@@ -278,6 +278,10 @@
             <inheritdoc/>
             <remarks>By default true.</remarks>
         </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.ResetOnlyOnEvaluationSuccess">
+            <inheritdoc/>
+            <remarks>By default true.</remarks>
+        </member>
         <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.ExplicitManipulationOnly">
             <inheritdoc/>
             <remarks>By default false.</remarks>
@@ -327,6 +331,11 @@
         <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition.ResetAfterConditionMet">
             <summary>
             If set to false the evaluation process will not reset the value of a condition to its initial value after <see cref="P:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition.IsConditionMet"/> is true.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition.ResetOnlyOnEvaluationSuccess">
+            <summary>
+            If set to true the evaluation process will only reset the met condition if evaluation returned true.
             </summary>
         </member>
         <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition.ExplicitManipulationOnly">
