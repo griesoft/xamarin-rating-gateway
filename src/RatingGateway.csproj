@@ -2,13 +2,28 @@
 
   <PropertyGroup>
     <TargetFrameworks>xamarinios10;monoandroid9.0;monoandroid10.0;netstandard2.1</TargetFrameworks>
+    <Product>$(AssemblyName) ($(TargetFramework))</Product>
+    <PackageId>Griesoft.Xamarin.RatingGateway</PackageId>
+    <Company>Griesinger Software</Company>
+    <Authors>Joonas Griesinger</Authors>
+    <Owners>jgdevlabs,jooni91</Owners>
+    <Title>Xamarin Rating Gateway</Title>
+    <Description>Catching the perfect moment to prompt your user to review your application can be a very difficult task and each failed attempt can be wasted potential. This rating gateway helps you to setup even complex conditional triggers that will prompt the user to review the app when all of them are met.</Description>
+    <PackageTags>ios;android;xamarin;rating;review;xamarin rating gateway; xamarin rating; xamarin review</PackageTags>
+    <PackageVersion>1.0.0</PackageVersion>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageIconUrl></PackageIconUrl>
+    <Copyright>2020 © Griesinger Software</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/jgdevlabs/xamarin-rating-gateway</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jgdevlabs/xamarin-rating-gateway</RepositoryUrl>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <AssemblyName>Griesoft.Xamarin.RatingGateway</AssemblyName>
     <RootNamespace>Griesoft.Xamarin.RatingGateway</RootNamespace>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|xamarinios10|AnyCPU'">
+  <PropertyGroup Condition="'$(TargetFramework)|$(Platform)'=='netstandard2.1|AnyCPU'">
     <DocumentationFile>D:\repos\RatingGateway\docs\Griesoft.Xamarin.RatingGateway.xml</DocumentationFile>
   </PropertyGroup>
 
