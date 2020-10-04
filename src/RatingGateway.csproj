@@ -8,7 +8,7 @@
     <Authors>Joonas Griesinger</Authors>
     <Owners>jgdevlabs,jooni91</Owners>
     <Title>Xamarin Rating Gateway</Title>
-    <Description>Catching the perfect moment to prompt your user to review your application can be a very difficult task and each failed attempt can be wasted potential. This rating gateway helps you to setup even complex conditional triggers that will prompt the user to review the app when all of them are met.</Description>
+    <Description>A rating gateway which takes care of when to prompt the user to review your Xamarin application by evaluating through a set of defined conditions each time a rating action is triggered by the user.</Description>
     <PackageTags>ios;android;xamarin;rating;review;xamarin rating gateway; xamarin rating; xamarin review</PackageTags>
     <PackageVersion>1.0.0</PackageVersion>
     <PackageReleaseNotes></PackageReleaseNotes>
