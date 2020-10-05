@@ -1,4 +1,6 @@
-﻿namespace Griesoft.Xamarin.RatingGateway
+﻿using System.Threading.Tasks;
+
+namespace Griesoft.Xamarin.RatingGateway
 {
     /// <summary>
     /// The interface for a view which is responsible to prompt the user to review the application.
@@ -13,5 +15,10 @@
         /// Try to open the review page for your application.
         /// </summary>
         void TryOpenRatingPage();
+
+        /// <summary>
+        /// Try to open the review page for your application asynchronously.
+        /// </summary>
+        Task TryOpenRatingPageAsync();
     }
 }

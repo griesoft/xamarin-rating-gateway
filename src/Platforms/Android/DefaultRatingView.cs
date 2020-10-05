@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using System.Threading.Tasks;
+using Android.App;
 using Android.Content;
 using Android.Net;
 using Android.OS;
@@ -19,6 +20,21 @@ namespace Griesoft.Xamarin.RatingGateway
                 return;
             }
 
+            NavigateToAppStorePage();
+        }
+
+        internal static async Task PlatformTryOpenRatingPageAsync(System.Func<Task<bool>>? runBeforeOpenAsync = default)
+        {
+            if (runBeforeOpenAsync != null && !await runBeforeOpenAsync())
+            {
+                return;
+            }
+
+            NavigateToAppStorePage();
+        }
+
+        private static void NavigateToAppStorePage()
+        {
             if (Application.Context == null)
             {
                 return;
