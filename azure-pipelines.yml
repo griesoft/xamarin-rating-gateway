@@ -40,8 +40,8 @@ steps:
   displayName: Run Tests
   inputs:
     command: 'test'
-    publishTestResults: true
     projects: '**/tests/RatingGateway.Tests.csproj'
+    arguments: '--collect:"Code Coverage"'
     testRunTitle: 'Shared Layer Tests'
     workingDirectory: '$(System.DefaultWorkingDirectory)'
 
