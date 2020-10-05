@@ -10,7 +10,8 @@ namespace Griesoft.Xamarin.RatingGateway
     /// </remarks>
     public sealed partial class DefaultRatingView
     {
-        internal static void PlatformTryOpenRatingPage() =>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "We need to match the signature in each platform project, even that the parameter would never be used.")]
+        internal static void PlatformTryOpenRatingPage(Func<bool>? runBeforeOpen = default) =>
             throw new NotImplementedException("Install this package on each platform project that you intent to use this package with.");
     }
 }

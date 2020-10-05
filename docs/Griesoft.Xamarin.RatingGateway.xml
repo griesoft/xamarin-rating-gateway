@@ -222,7 +222,7 @@
             If you need custom manipulation or reset logic, or if you want to add more complex functionality that the build-in conditions don't provide, 
             you should write a custom condition and inherit from the condition base class <see cref="T:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1"/>.
             </remarks>
-            <typeparam name="TConditionType"></typeparam>
+            <typeparam name="TConditionStateType"></typeparam>
         </member>
         <member name="M:Griesoft.Xamarin.RatingGateway.RatingCondition`1.#ctor(`0,System.Func{`0,System.Boolean})">
             <summary>
@@ -243,7 +243,7 @@
             <summary>
             The base class for a condition with an default implementation of the <see cref="T:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition"/> interface. Use it to easily create custom conditions.
             </summary>
-            <typeparam name="TConditionType">The type that this condition is dedicated to store, manipulate and evaluate.</typeparam>
+            <typeparam name="TConditionStateType">The type that this condition is dedicated to store, manipulate and evaluate.</typeparam>
             <remarks>
             If you need custom manipulation or reset logic, or if you want to add more complex functionality that the build-in conditions don't provide, 
             you should write a custom condition and inherit from this abstract base class.
@@ -302,7 +302,7 @@
         </member>
         <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1.ManipulateState(System.Object)">
             <summary>
-            Sets the current state to the specified value if it can be cast to <typeparamref name="TConditionType"/>.
+            Sets the current state to the specified value if it can be cast to <typeparamref name="TConditionStateType"/>.
             </summary>
             <param name="parameter">The value to set as the new current state.</param>
         </member>
@@ -410,8 +410,26 @@
         </member>
         <member name="T:Griesoft.Xamarin.RatingGateway.DefaultRatingView">
             <summary>
-            A default rating view implementation for iOS.
+            A default rating view implementation for .NET Standard.
             </summary>
+            <remarks>
+            If the package is not installed on each platform that it is used on, this will throw a <see cref="T:System.NotImplementedException"/>.
+            </remarks>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.DefaultRatingView.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.DefaultRatingView.#ctor(System.Func{System.Boolean})">
+            <summary>
+            
+            </summary>
+            <param name="runBeforeOpen">A last chance function that be used to intercept navigating to the review page of your app.</param>
+            <remarks>
+            <paramref name="runBeforeOpen"/> will be only called if the In-App Review process is not available, i.e. just before we would open the Store page of your app.
+            This can be useful to first prompt the user to review your app by opening a pop-up. Not doing so can have a negative impact on user experience.
+            </remarks>
         </member>
         <member name="M:Griesoft.Xamarin.RatingGateway.DefaultRatingView.TryOpenRatingPage">
             <inheritdoc/>

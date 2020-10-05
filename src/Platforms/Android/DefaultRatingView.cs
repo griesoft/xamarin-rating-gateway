@@ -12,8 +12,13 @@ namespace Griesoft.Xamarin.RatingGateway
     {
         private const string MarketUri = "market://details?id=";
 
-        internal static void PlatformTryOpenRatingPage()
+        internal static void PlatformTryOpenRatingPage(System.Func<bool>? runBeforeOpen = default)
         {
+            if (runBeforeOpen != null && !runBeforeOpen())
+            {
+                return;
+            }
+
             if (Application.Context == null)
             {
                 return;
