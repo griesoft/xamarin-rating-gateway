@@ -57,18 +57,29 @@ This package has 5 build in conditions. These conditions do cover many common us
 
 The included conditions in this package are the following:
 
-#### BooleanRatingCondition
+##### BooleanRatingCondition
 Use it like a switch, to memorize certain actions that your user did in your app.
 
-#### CountRatingCondition
+##### CountRatingCondition
 Use it to count certain actions that your user did in your app. The condition is met by default when the count is equal to or greater than the specified goal.
 
-#### DateTimeExpiredCondition
+##### DateTimeExpiredCondition
 Use it to mark a certain point in time that needs to be in the past for this condition to be met.
 
-#### StringMatchCondition
+##### StringMatchCondition
 Use it to match strings with each other, like user input for example.
 
-#### RatingCondition
+##### RatingCondition
 This is a generic condition that can be used to effortlessly create your own conditions. Some functionality can be only customized by writing your own condition class thou.
 
+## Documentation
+Is on it's why...
+
+## Supported Platforms
+Currently this package supports **NetStandard**, **Android 9**, **Android 10** and **iOS**.
+
+## Contributing
+Contribution is heavily encouraged. Best way of doing so is propably by first start a discussion about new features or improvements, or if you found a bug report it first by creating a new issue first. There you can voluntier to make it your mission to fix it. :smile:
+
+## License
+Please see the [License](https://github.com/jgdevlabs/xamarin-rating-gateway/blob/master/LICENSE).
