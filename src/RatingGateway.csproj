@@ -6,10 +6,10 @@
     <PackageId>Griesoft.Xamarin.RatingGateway</PackageId>
     <Company>Griesinger Software</Company>
     <Authors>Joonas Griesinger</Authors>
-    <Owners>jgdevlabs,jooni91</Owners>
+    <Owners>jgdevlabs;jooni91</Owners>
     <Title>Xamarin Rating Gateway</Title>
-    <Description>A rating gateway which takes care of when to prompt the user to review your Xamarin application by evaluating through a set of defined conditions each time a rating action is triggered by the user.</Description>
-    <PackageTags>ios;android;xamarin;rating;review;xamarin rating gateway; xamarin rating; xamarin review</PackageTags>
+    <Description>A rating gateway which takes care of when to prompt the user to review your Xamarin application, by evaluating through a set of defined conditions each time a rating action is triggered by the user.</Description>
+    <PackageTags>ios;android;xamarin;rating;review;xamarin rating gateway; xamarin rating; xamarin review; rating system; review tool</PackageTags>
     <PackageVersion>1.0.0</PackageVersion>
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageIconUrl></PackageIconUrl>
