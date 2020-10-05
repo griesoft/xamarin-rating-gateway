@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Griesoft.Xamarin.RatingGateway.Cache;
 using Griesoft.Xamarin.RatingGateway.Conditions;
 
@@ -246,6 +247,86 @@ namespace Griesoft.Xamarin.RatingGateway
             if (evaluationResult)
             {
                 RatingView.TryOpenRatingPage();
+            }
+
+            ResetAllMetConditions(evaluationResult);
+        }
+
+        /// <summary>
+        /// Evaluate through all conditions in the collection and if all necessary conditions are met open the rating page asynchronously.
+        /// </summary>
+        /// <remarks>
+        /// Use <see cref="Evaluate"/> if you are not sure about which one to use.
+        /// <para/>
+        /// The evaluation process will first manipulate all conditions that allow implicit manipulation by using their parameterless manipulation method.
+        /// After manipulation, the actual evaluation will happen, and after evaluation has finished all met conditions will be reset which allow automatic reset.
+        /// </remarks>
+        public async Task EvaluateAsync()
+        {
+            ManipulateConditionState(null);
+
+            var evaluationResult = EvaluateConditions();
+
+            if (evaluationResult)
+            {
+                await RatingView.TryOpenRatingPageAsync();
+            }
+
+            ResetAllMetConditions(evaluationResult);
+        }
+
+        /// <summary>
+        /// Evaluate through all conditions in the collection and if all necessary conditions are met open the rating page asynchronously.
+        /// </summary>
+        /// <param name="conditionName">The unique name of the condition that should be prioritized.</param>
+        /// <param name="parameter">An optional parameter that will be passed to the manipulation process for the specified condition.</param>
+        /// <param name="manipulateOnly">Set to true if the specified condition should not be prioritized in the actual evaluation phase and be used for manipulation only. The default is false.</param>
+        /// <remarks>
+        /// Use <see cref="Evaluate(string, object?, bool)"/> if you are not sure about which one to use.
+        /// <para/>
+        /// The evaluation process will first manipulate all conditions that allow implicit manipulation by using their parameterless manipulation method.
+        /// After manipulation, the actual evaluation will happen, and after evaluation has finished all met conditions will be reset which allow automatic reset.
+        /// <para/>
+        /// If the specified condition is not used for manipulation only, it will be prioritized by the evaluator. This means that the prioritized condition must be
+        /// met in addition to all prerequisite and required conditions, before evaluating to true.
+        /// </remarks>
+        public async Task EvaluateAsync(string conditionName, object? parameter = default, bool manipulateOnly = false)
+        {
+            ManipulateConditionState(new Dictionary<string, object?>() { { conditionName, parameter } });
+
+            var evaluationResult = EvaluateConditions(manipulateOnly ? null : new List<string>() { conditionName });
+
+            if (evaluationResult)
+            {
+                await RatingView.TryOpenRatingPageAsync();
+            }
+
+            ResetAllMetConditions(evaluationResult);
+        }
+
+        /// <summary>
+        /// Evaluate through all conditions in the collection and if all necessary conditions are met open the rating page asynchronously.
+        /// </summary>
+        /// <param name="parameters">A collection of unique condition names and optional parameters for them.</param>
+        /// <param name="manipulateOnly">Set to true if the specified conditions should not be prioritized in the actual evaluation phase and be used for manipulation only. The default is false.</param>
+        /// <remarks>
+        /// Use <see cref="Evaluate(Dictionary{string, object?}, bool)"/> if you are not sure about which one to use.
+        /// <para/>
+        /// The evaluation process will first manipulate all conditions that allow implicit manipulation by using their parameterless manipulation method.
+        /// After manipulation, the actual evaluation will happen, and after evaluation has finished all met conditions will be reset which allow automatic reset.
+        /// <para/>
+        /// If the specified conditions are not used for manipulation only, they will be prioritized by the evaluator. This means that the prioritized conditions must be
+        /// met in addition to all prerequisite and required conditions, before evaluating to true.
+        /// </remarks>
+        public async Task EvaluateAsync(Dictionary<string, object?> parameters, bool manipulateOnly = false)
+        {
+            ManipulateConditionState(parameters);
+
+            var evaluationResult = EvaluateConditions(manipulateOnly ? null : parameters?.Keys);
+
+            if (evaluationResult)
+            {
+                await RatingView.TryOpenRatingPageAsync();
             }
 
             ResetAllMetConditions(evaluationResult);
