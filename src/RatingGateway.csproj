@@ -6,7 +6,7 @@
     <PackageId>Griesoft.Xamarin.RatingGateway</PackageId>
     <Company>Griesinger Software</Company>
     <Authors>Joonas Griesinger</Authors>
-    <Owners>jgdevlabs;jooni91</Owners>
+    <Owners>GriesingerSoftware,jooni91</Owners>
     <Title>Xamarin Rating Gateway</Title>
     <Description>A rating gateway which takes care of when to prompt the user to review your Xamarin application, by evaluating through a set of defined conditions each time a rating action is triggered by the user.</Description>
     <PackageTags>ios;android;xamarin;rating;review;xamarin rating gateway; xamarin rating; xamarin review; rating system; review tool</PackageTags>
@@ -15,10 +15,14 @@
     <PackageIconUrl></PackageIconUrl>
     <Copyright>2020 © Griesinger Software</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <NeutralLanguage>en</NeutralLanguage>
     <PackageProjectUrl>https://github.com/jgdevlabs/xamarin-rating-gateway</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jgdevlabs/xamarin-rating-gateway</RepositoryUrl>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>Griesoft.Xamarin.RatingGateway</AssemblyName>
     <RootNamespace>Griesoft.Xamarin.RatingGateway</RootNamespace>
   </PropertyGroup>
@@ -32,6 +36,7 @@
     <None Include="Platforms\**\*.cs" />
     <None Include="Resources\*.cs" />
     <Compile Remove="Resources\*.cs" />
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
