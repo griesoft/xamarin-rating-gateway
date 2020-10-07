@@ -31,6 +31,8 @@ namespace Griesoft.Xamarin.RatingGateway
             RatingConditionCache = new DefaultRatingConditionCache();
         }
 
+        private bool IsInitialized { get; set; } = false;
+
         /// <summary>
         /// The condition collection returned as an enumerable.
         /// </summary>
@@ -65,7 +67,7 @@ namespace Griesoft.Xamarin.RatingGateway
         public IRatingConditionCache RatingConditionCache { get; set; }
 
         /// <summary>
-        /// The singleton instance of this rating gateway. Returns null if the service was not initialized on application startup.
+        /// A singleton instance of the rating gateway.
         /// </summary>
         public static RatingGateway? Current { get; private set; }
 
@@ -76,10 +78,17 @@ namespace Griesoft.Xamarin.RatingGateway
         /// <param name="condition">The condition instance that will be added to the collection.</param>
         /// <param name="ratingView">Optional; pass a custom rating view. If not specified or null, <see cref="DefaultRatingView"/> will be used instead.</param>
         /// <param name="ratingCache">Optional; pass a custom condition cache. If not specified or null, <see cref="DefaultRatingConditionCache"/> will be used instead.</param>
-        /// <exception cref="System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
+        /// <remarks>Can be only called once in the lifetime of a <see cref="RatingGateway"/>. All other calls after the initial one, do just return.</remarks>
         public static void Initialize(string conditionName, IRatingCondition condition, IRatingView? ratingView = default, IRatingConditionCache? ratingCache = default)
         {
             var ratingGateway = CreateNewGatewayInstance();
+
+            if (ratingGateway.IsInitialized)
+            {
+                return;
+            }
+
+            ratingGateway.IsInitialized = true;
 
             ratingGateway.AddCondition(conditionName, condition);
 
@@ -100,10 +109,17 @@ namespace Griesoft.Xamarin.RatingGateway
         /// <param name="conditions">A collection of key value pairs where the key will be used as the unique condition name and the value is added to the condition collection.</param>
         /// <param name="ratingView">Optional; pass a custom rating view. If not specified or null, <see cref="DefaultRatingView"/> will be used instead.</param>
         /// <param name="ratingCache">Optional; pass a custom condition cache. If not specified or null, <see cref="DefaultRatingConditionCache"/> will be used instead.</param>
-        /// <exception cref="System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
+        /// <remarks>Can be only called once in the lifetime of a <see cref="RatingGateway"/>. All other calls after the initial one, do just return.</remarks>
         public static void Initialize(IEnumerable<KeyValuePair<string, IRatingCondition>> conditions, IRatingView? ratingView = default, IRatingConditionCache? ratingCache = default)
         {
             var ratingGateway = CreateNewGatewayInstance();
+
+            if (ratingGateway.IsInitialized)
+            {
+                return;
+            }
+
+            ratingGateway.IsInitialized = true;
 
             ratingGateway.AddCondition(conditions);
 
