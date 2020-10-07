@@ -566,7 +566,7 @@
             <param name="condition">The condition instance that will be added to the collection.</param>
             <param name="ratingView">Optional; pass a custom rating view. If not specified or null, <see cref="T:Griesoft.Xamarin.RatingGateway.DefaultRatingView"/> will be used instead.</param>
             <param name="ratingCache">Optional; pass a custom condition cache. If not specified or null, <see cref="T:Griesoft.Xamarin.RatingGateway.Cache.DefaultRatingConditionCache"/> will be used instead.</param>
-            <remarks>Can be only called once in the lifetime of a <see cref="T:Griesoft.Xamarin.RatingGateway.RatingGateway"/>. All other calls after the initial one, do just return.</remarks>
+            <remarks>Call it only once in the lifetime of a <see cref="T:Griesoft.Xamarin.RatingGateway.RatingGateway"/>. All other calls after the initial one, do just return.</remarks>
         </member>
         <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.Initialize(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition}},Griesoft.Xamarin.RatingGateway.IRatingView,Griesoft.Xamarin.RatingGateway.Cache.IRatingConditionCache)">
             <summary>
@@ -575,7 +575,7 @@
             <param name="conditions">A collection of key value pairs where the key will be used as the unique condition name and the value is added to the condition collection.</param>
             <param name="ratingView">Optional; pass a custom rating view. If not specified or null, <see cref="T:Griesoft.Xamarin.RatingGateway.DefaultRatingView"/> will be used instead.</param>
             <param name="ratingCache">Optional; pass a custom condition cache. If not specified or null, <see cref="T:Griesoft.Xamarin.RatingGateway.Cache.DefaultRatingConditionCache"/> will be used instead.</param>
-            <remarks>Can be only called once in the lifetime of a <see cref="T:Griesoft.Xamarin.RatingGateway.RatingGateway"/>. All other calls after the initial one, do just return.</remarks>
+            <remarks>Call it only once in the lifetime of a <see cref="T:Griesoft.Xamarin.RatingGateway.RatingGateway"/>. All other calls after the initial one, do just return.</remarks>
         </member>
         <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.AddCondition(System.String,Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition)">
             <summary>
