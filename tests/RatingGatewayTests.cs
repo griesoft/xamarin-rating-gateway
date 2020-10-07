@@ -21,8 +21,29 @@ namespace Griesoft.Xamarin.RatingGateway.Tests
             RatingGateway.Initialize("Test", new BooleanRatingCondition());
 
             // Assert
-            Assert.NotNull(RatingGateway.Current?.RatingView);
-            Assert.NotNull(RatingGateway.Current?.RatingConditionCache);
+            Assert.NotNull(RatingGateway.Current.RatingView);
+            Assert.NotNull(RatingGateway.Current.RatingConditionCache);
+            Assert.Single(RatingGateway.Current.RatingConditions);
+        }
+
+        [Fact]
+        public void Initialize_Returns_OnSecondCall()
+        {
+            // Arrange
+            RatingGateway.Initialize("Test", new BooleanRatingCondition());
+
+            // Act
+            RatingGateway.Initialize("Test", new BooleanRatingCondition());
+
+
+            // Assert
+            Assert.NotNull(RatingGateway.Current.RatingView);
+            Assert.NotNull(RatingGateway.Current.RatingConditionCache);
+            Assert.Single(RatingGateway.Current.RatingConditions);
+
+            // By calling initialize twice, if the second call would not return it would throw a ArgumentExecption,
+            // because adding a condition with the same key is not possible.
+
         }
 
         [Fact]
