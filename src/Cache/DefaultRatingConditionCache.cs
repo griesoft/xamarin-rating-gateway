@@ -19,6 +19,7 @@ namespace Griesoft.Xamarin.RatingGateway.Cache
     public class DefaultRatingConditionCache : IRatingConditionCache
     {
         private readonly string _conditionCacheFileName;
+        private readonly JsonSerializerSettings _serializerSettings;
         private readonly Lazy<List<ConditionCacheDto>> _lazyConditionCacheDtos;
 
         /// <summary>
@@ -33,6 +34,12 @@ namespace Griesoft.Xamarin.RatingGateway.Cache
         public DefaultRatingConditionCache(string fileName)
         {
             _conditionCacheFileName = $"{fileName}.txt";
+
+            _serializerSettings = new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
+            _serializerSettings.Converters.Insert(0, new PrimitiveJsonConverter());
 
             _lazyConditionCacheDtos = new Lazy<List<ConditionCacheDto>>(() =>
                 File.Exists(Path.Combine(CacheHelpers.AppDataDirectory, _conditionCacheFileName))
@@ -69,7 +76,7 @@ namespace Griesoft.Xamarin.RatingGateway.Cache
                 _lazyConditionCacheDtos.Value[_lazyConditionCacheDtos.Value.IndexOf(existingCachedValueDto)] = condition.ToConditionCacheDto(conditionName);
             }
 
-            File.WriteAllText(Path.Combine(CacheHelpers.AppDataDirectory, _conditionCacheFileName), JsonConvert.SerializeObject(_lazyConditionCacheDtos.Value));
+            File.WriteAllText(Path.Combine(CacheHelpers.AppDataDirectory, _conditionCacheFileName), JsonConvert.SerializeObject(_lazyConditionCacheDtos.Value, _serializerSettings));
         }
 
         /// <inheritdoc/>
@@ -84,7 +91,7 @@ namespace Griesoft.Xamarin.RatingGateway.Cache
 
             _lazyConditionCacheDtos.Value.Remove(cachedValueDto);
 
-            File.WriteAllText(Path.Combine(CacheHelpers.AppDataDirectory, _conditionCacheFileName), JsonConvert.SerializeObject(_lazyConditionCacheDtos.Value));
+            File.WriteAllText(Path.Combine(CacheHelpers.AppDataDirectory, _conditionCacheFileName), JsonConvert.SerializeObject(_lazyConditionCacheDtos.Value, _serializerSettings));
         }
     }
 }
