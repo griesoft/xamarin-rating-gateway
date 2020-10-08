@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingGatewaySamples.Droid", "Samples\RatingGatewaySamples.Android\RatingGatewaySamples.Droid.csproj", "{9DBB833B-A672-48FE-99C0-79D4B0CF8D6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,12 @@ Global
 		{10599FA1-B06D-491E-B0C8-1C929E335A8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10599FA1-B06D-491E-B0C8-1C929E335A8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10599FA1-B06D-491E-B0C8-1C929E335A8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DBB833B-A672-48FE-99C0-79D4B0CF8D6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DBB833B-A672-48FE-99C0-79D4B0CF8D6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DBB833B-A672-48FE-99C0-79D4B0CF8D6B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9DBB833B-A672-48FE-99C0-79D4B0CF8D6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DBB833B-A672-48FE-99C0-79D4B0CF8D6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DBB833B-A672-48FE-99C0-79D4B0CF8D6B}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
