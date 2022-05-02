@@ -4,9 +4,9 @@ A rating gateway which takes care of when to prompt the user to review your Xama
 Catching the perfect moment to prompt your user to review your application can be a very difficult task and each failed attempt can be big wasted potential. This rating gateway helps you to set up even complex conditional triggers that will prompt the user to review the app when all of the trivial conditions are met.
 
 [![Build Status](https://dev.azure.com/griesingersoftware/Xamarin%20Rating%20Gateway/_apis/build/status/CI%20Pipeline?branchName=master)](https://dev.azure.com/griesingersoftware/Xamarin%20Rating%20Gateway/_build/latest?definitionId=26&branchName=master)
-[![License](https://badgen.net/github/license/jgdevlabs/xamarin-rating-gateway)](https://github.com/jgdevlabs/xamarin-rating-gateway/blob/master/LICENSE)
+[![License](https://badgen.net/github/license/griesoft/xamarin-rating-gateway)](https://github.com/griesoft/xamarin-rating-gateway/blob/master/LICENSE)
 [![NuGet](https://badgen.net/nuget/v/Griesoft.Xamarin.RatingGateway)](https://www.nuget.org/packages/Griesoft.Xamarin.RatingGateway)
-[![GitHub Release](https://badgen.net/github/release/jgdevlabs/xamarin-rating-gateway)](https://github.com/jgdevlabs/xamarin-rating-gateway/releases)
+[![GitHub Release](https://badgen.net/github/release/griesoft/xamarin-rating-gateway)](https://github.com/griesoft/xamarin-rating-gateway/releases)
 
 ## Installation
 
@@ -84,4 +84,4 @@ Currently this package supports **NetStandard**, **Android 9**, **Android 10** a
 Contributing is heavily encouraged. The best way of doing so is probably by first start a discussion about new features or improvements, or if you found a bug report it first by creating a new issue first. There you can volunteer to make it your mission to fix it. :smile:
 
 ## License
-Please see the [License](https://github.com/jgdevlabs/xamarin-rating-gateway/blob/master/LICENSE).
+Please see the [License](https://github.com/griesoft/xamarin-rating-gateway/blob/master/LICENSE).
