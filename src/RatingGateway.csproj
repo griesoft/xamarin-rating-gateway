@@ -16,8 +16,8 @@
     <Copyright>2020 © Griesinger Software</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageProjectUrl>https://github.com/jgdevlabs/xamarin-rating-gateway</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/jgdevlabs/xamarin-rating-gateway</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/griesoft/xamarin-rating-gateway</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/griesoft/xamarin-rating-gateway</RepositoryUrl>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <IncludeSymbols>true</IncludeSymbols>
