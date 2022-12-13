@@ -146,98 +146,91 @@
             Inverts the current state of this condition.
             </summary>
         </member>
-        <member name="T:Griesoft.Xamarin.RatingGateway.CountRatingCondition">
+        <member name="T:Griesoft.Xamarin.RatingGateway.Conditions.ConditionCollection">
             <summary>
-            A count condition that by default evaluates to true when the current count has reached the specified goal. Use it to keep count of user events in your application or as a countdown.
+            A collection class for <see cref="T:Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition"/>'s.
             </summary>
         </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.CountRatingCondition.#ctor(System.Int32,System.Int32)">
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.ConditionCollection.#ctor">
             <summary>
             
             </summary>
-            <param name="initialState">Specify the initial count for this condition.</param>
-            <param name="goal">Specify the count goal for this condition. When the current state is equal of exceeds that goal the condition is met.</param>
         </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.CountRatingCondition.#ctor(System.Int32,System.Int32,Griesoft.Xamarin.RatingGateway.ConditionType)">
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.ConditionCollection.Item(System.String)">
             <summary>
             
             </summary>
-            <param name="initialState">Specify the initial count for this condition.</param>
-            <param name="goal">Specify the count goal for this condition. When the current state is equal of exceeds that goal the condition is met.</param>
-            <param name="conditionType">Specify the condition type.</param>
+            <param name="key"></param>
+            <returns></returns>
         </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.CountRatingCondition.#ctor(System.Int32,System.Func{System.Int32,System.Boolean})">
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.ConditionCollection.RatingConditionCache">
             <summary>
-            
-            </summary>
-            <param name="initialState">Specify the initial count for this condition.</param>
-            <param name="evaluator">An evaluator function that determines when the condition is met.</param>
-        </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.CountRatingCondition.#ctor(System.Int32,System.Func{System.Int32,System.Boolean},Griesoft.Xamarin.RatingGateway.ConditionType)">
-            <summary>
-            
-            </summary>
-            <param name="initialState">Specify the initial count for this condition.</param>
-            <param name="evaluator">An evaluator function that determines when the condition is met.</param>
-            <param name="conditionType">Specify the condition type.</param>
-        </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.CountRatingCondition.ManipulateState">
-            <summary>
-            Increase the current count of this condition by one.
+            The rating condition cache that does manage the reading and writing of cached values to the file system.
             </summary>
         </member>
-        <member name="T:Griesoft.Xamarin.RatingGateway.DateTimeExpiredCondition">
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.ConditionCollection.RatingConditions">
             <summary>
-            A condition that will evaluate to true after a specific moment in time is in the past. 
-            Use it to wait for a certain amount of time before asking the user to review your application, for example.
+            The condition collection returned as an enumerable.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.ConditionCollection.HasPrerequisiteConditions">
+            <summary>
+            True if the condition collection contains any condition that is of type <see cref="F:Griesoft.Xamarin.RatingGateway.ConditionType.Prerequisite"/>.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.ConditionCollection.HasRequiredConditions">
+            <summary>
+            True if the condition collection contains any condition that is of type <see cref="F:Griesoft.Xamarin.RatingGateway.ConditionType.Requirement"/>.
+            </summary>
+        </member>
+        <member name="P:Griesoft.Xamarin.RatingGateway.Conditions.ConditionCollection.HasOnlyPrerequisiteConditions">
+            <summary>
+            True if the condition collection contains only conditions that are of type <see cref="F:Griesoft.Xamarin.RatingGateway.ConditionType.Prerequisite"/>.
             </summary>
             <remarks>
-            By caching the current state of this condition, the loading process of cached values will set the current state to the same
-            state that it was when the condition was added the first time.
+            Make sure that this always returns false. If it doesn't, the rating gateway will never prompt the user to review your application. 
             </remarks>
         </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.DateTimeExpiredCondition.#ctor(System.TimeSpan)">
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.ConditionCollection.AddCondition(System.String,Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition)">
+            <summary>
+            Add a condition to the collection.
+            </summary>
+            <param name="conditionName">The unique name of the condition.</param>
+            <param name="condition">The condition instance that will be added to the collection.</param>
+            <exception cref="T:System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.ConditionCollection.AddCondition(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition}})">
+            <summary>
+            Add multiple conditions to the collection at once.
+            </summary>
+            <param name="conditions">A collection of key-value pairs where the key is used as the unique condition name and the value is added to the condition collection.</param>
+            <exception cref="T:System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.ConditionCollection.RemoveCondition(System.String,System.Boolean)">
+            <summary>
+            Remove a condition with the specified name from the collection if it exists.
+            </summary>
+            <param name="conditionName">The unique name of the condition.</param>
+            <param name="removeFromCache">If true a cached state of the condition will also be removed from the cache. By default true.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.ConditionCollection.ResetAllConditions">
+            <summary>
+            Reset all condition states in the collection.
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.ConditionCollection.ContainsKey(System.String)">
+            <summary>
+            Check whether the collections contains the <paramref name="key"/> or not.
+            </summary>
+            <param name="key"></param>
+            <returns><c>true</c> if the collections contains the key, otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.Conditions.ConditionCollection.SaveCachableConditionState(System.String,Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition)">
             <summary>
             
             </summary>
-            <param name="timeFromNowUtc">The amount of time to add to <see cref="P:System.DateTime.UtcNow"/> when setting the initial state of this condition.</param>
-        </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.DateTimeExpiredCondition.#ctor(System.TimeSpan,Griesoft.Xamarin.RatingGateway.ConditionType)">
-            <summary>
-            
-            </summary>
-            <param name="timeFromNowUtc">The amount of time to add to <see cref="P:System.DateTime.UtcNow"/> when setting the initial state of this condition.</param>
-            <param name="conditionType">Specify the condition type.</param>
-        </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.DateTimeExpiredCondition.Reset">
-            <summary>
-            Reset will add the amount of time that was passed to the constructor of this condition to <see cref="P:System.DateTime.UtcNow"/> and set the result as current state.
-            </summary>
-        </member>
-        <member name="T:Griesoft.Xamarin.RatingGateway.RatingCondition`1">
-            <summary>
-            A generic condition that enables you to create custom conditions with minimal effort.
-            </summary>
-            <remarks>
-            If you need custom manipulation or reset logic, or if you want to add more complex functionality that the build-in conditions don't provide, 
-            you should write a custom condition and inherit from the condition base class <see cref="T:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1"/>.
-            </remarks>
-            <typeparam name="TConditionStateType"></typeparam>
-        </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.RatingCondition`1.#ctor(`0,System.Func{`0,System.Boolean})">
-            <summary>
-            
-            </summary>
-            <param name="initialState">Specify the initial value for this condition.</param>
-            <param name="evaluator">An evaluator function that determines when the condition is met.</param>
-        </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.RatingCondition`1.#ctor(`0,System.Func{`0,System.Boolean},Griesoft.Xamarin.RatingGateway.ConditionType)">
-            <summary>
-            
-            </summary>
-            <param name="initialState">Specify the initial value for this condition.</param>
-            <param name="evaluator">An evaluator function that determines when the condition is met.</param>
-            <param name="conditionType">Specify the condition type.</param>
+            <param name="conditionName"></param>
+            <param name="condition"></param>
         </member>
         <member name="T:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1">
             <summary>
@@ -373,6 +366,99 @@
             Manipulate the current value by a specified parameter.
             </summary>
             <param name="parameter">The value to use for state manipulation.</param>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.CountRatingCondition">
+            <summary>
+            A count condition that by default evaluates to true when the current count has reached the specified goal. Use it to keep count of user events in your application or as a countdown.
+            </summary>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.CountRatingCondition.#ctor(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="initialState">Specify the initial count for this condition.</param>
+            <param name="goal">Specify the count goal for this condition. When the current state is equal of exceeds that goal the condition is met.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.CountRatingCondition.#ctor(System.Int32,System.Int32,Griesoft.Xamarin.RatingGateway.ConditionType)">
+            <summary>
+            
+            </summary>
+            <param name="initialState">Specify the initial count for this condition.</param>
+            <param name="goal">Specify the count goal for this condition. When the current state is equal of exceeds that goal the condition is met.</param>
+            <param name="conditionType">Specify the condition type.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.CountRatingCondition.#ctor(System.Int32,System.Func{System.Int32,System.Boolean})">
+            <summary>
+            
+            </summary>
+            <param name="initialState">Specify the initial count for this condition.</param>
+            <param name="evaluator">An evaluator function that determines when the condition is met.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.CountRatingCondition.#ctor(System.Int32,System.Func{System.Int32,System.Boolean},Griesoft.Xamarin.RatingGateway.ConditionType)">
+            <summary>
+            
+            </summary>
+            <param name="initialState">Specify the initial count for this condition.</param>
+            <param name="evaluator">An evaluator function that determines when the condition is met.</param>
+            <param name="conditionType">Specify the condition type.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.CountRatingCondition.ManipulateState">
+            <summary>
+            Increase the current count of this condition by one.
+            </summary>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.DateTimeExpiredCondition">
+            <summary>
+            A condition that will evaluate to true after a specific moment in time is in the past. 
+            Use it to wait for a certain amount of time before asking the user to review your application, for example.
+            </summary>
+            <remarks>
+            By caching the current state of this condition, the loading process of cached values will set the current state to the same
+            state that it was when the condition was added the first time.
+            </remarks>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.DateTimeExpiredCondition.#ctor(System.TimeSpan)">
+            <summary>
+            
+            </summary>
+            <param name="timeFromNowUtc">The amount of time to add to <see cref="P:System.DateTime.UtcNow"/> when setting the initial state of this condition.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.DateTimeExpiredCondition.#ctor(System.TimeSpan,Griesoft.Xamarin.RatingGateway.ConditionType)">
+            <summary>
+            
+            </summary>
+            <param name="timeFromNowUtc">The amount of time to add to <see cref="P:System.DateTime.UtcNow"/> when setting the initial state of this condition.</param>
+            <param name="conditionType">Specify the condition type.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.DateTimeExpiredCondition.Reset">
+            <summary>
+            Reset will add the amount of time that was passed to the constructor of this condition to <see cref="P:System.DateTime.UtcNow"/> and set the result as current state.
+            </summary>
+        </member>
+        <member name="T:Griesoft.Xamarin.RatingGateway.RatingCondition`1">
+            <summary>
+            A generic condition that enables you to create custom conditions with minimal effort.
+            </summary>
+            <remarks>
+            If you need custom manipulation or reset logic, or if you want to add more complex functionality that the build-in conditions don't provide, 
+            you should write a custom condition and inherit from the condition base class <see cref="T:Griesoft.Xamarin.RatingGateway.Conditions.RatingConditionBase`1"/>.
+            </remarks>
+            <typeparam name="TConditionStateType"></typeparam>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingCondition`1.#ctor(`0,System.Func{`0,System.Boolean})">
+            <summary>
+            
+            </summary>
+            <param name="initialState">Specify the initial value for this condition.</param>
+            <param name="evaluator">An evaluator function that determines when the condition is met.</param>
+        </member>
+        <member name="M:Griesoft.Xamarin.RatingGateway.RatingCondition`1.#ctor(`0,System.Func{`0,System.Boolean},Griesoft.Xamarin.RatingGateway.ConditionType)">
+            <summary>
+            
+            </summary>
+            <param name="initialState">Specify the initial value for this condition.</param>
+            <param name="evaluator">An evaluator function that determines when the condition is met.</param>
+            <param name="conditionType">Specify the condition type.</param>
         </member>
         <member name="T:Griesoft.Xamarin.RatingGateway.StringMatchCondition">
             <summary>
@@ -520,37 +606,9 @@
             reset met conditions if allowed, and cache the current state of cachable conditions.
             </remarks>
         </member>
-        <member name="P:Griesoft.Xamarin.RatingGateway.RatingGateway.RatingConditions">
-            <summary>
-            The condition collection returned as an enumerable.
-            </summary>
-        </member>
-        <member name="P:Griesoft.Xamarin.RatingGateway.RatingGateway.HasPrerequisiteConditions">
-            <summary>
-            True if the condition collection contains any condition that is of type <see cref="F:Griesoft.Xamarin.RatingGateway.ConditionType.Prerequisite"/>.
-            </summary>
-        </member>
-        <member name="P:Griesoft.Xamarin.RatingGateway.RatingGateway.HasRequiredConditions">
-            <summary>
-            True if the condition collection contains any condition that is of type <see cref="F:Griesoft.Xamarin.RatingGateway.ConditionType.Requirement"/>.
-            </summary>
-        </member>
-        <member name="P:Griesoft.Xamarin.RatingGateway.RatingGateway.HasOnlyPrerequisiteConditions">
-            <summary>
-            True if the condition collection contains only conditions that are of type <see cref="F:Griesoft.Xamarin.RatingGateway.ConditionType.Prerequisite"/>.
-            </summary>
-            <remarks>
-            Make sure that this always returns false. If it doesn't, the rating gateway will never prompt the user to review your application. 
-            </remarks>
-        </member>
         <member name="P:Griesoft.Xamarin.RatingGateway.RatingGateway.RatingView">
             <summary>
             The rating view that does display the rating page to the user.
-            </summary>
-        </member>
-        <member name="P:Griesoft.Xamarin.RatingGateway.RatingGateway.RatingConditionCache">
-            <summary>
-            The rating condition cache that does manage the reading and writing of cached values to the file system.
             </summary>
         </member>
         <member name="P:Griesoft.Xamarin.RatingGateway.RatingGateway.Current">
@@ -576,33 +634,6 @@
             <param name="ratingView">Optional; pass a custom rating view. If not specified or null, <see cref="T:Griesoft.Xamarin.RatingGateway.DefaultRatingView"/> will be used instead.</param>
             <param name="ratingCache">Optional; pass a custom condition cache. If not specified or null, <see cref="T:Griesoft.Xamarin.RatingGateway.Cache.DefaultRatingConditionCache"/> will be used instead.</param>
             <remarks>Call it only once in the lifetime of a <see cref="T:Griesoft.Xamarin.RatingGateway.RatingGateway"/>. All other calls after the initial one, do just return.</remarks>
-        </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.AddCondition(System.String,Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition)">
-            <summary>
-            Add a condition to the collection.
-            </summary>
-            <param name="conditionName">The unique name of the condition.</param>
-            <param name="condition">The condition instance that will be added to the collection.</param>
-            <exception cref="T:System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
-        </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.AddCondition(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,Griesoft.Xamarin.RatingGateway.Conditions.IRatingCondition}})">
-            <summary>
-            Add multiple conditions to the collection at once.
-            </summary>
-            <param name="conditions">A collection of key-value pairs where the key is used as the unique condition name and the value is added to the condition collection.</param>
-            <exception cref="T:System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
-        </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.RemoveCondition(System.String,System.Boolean)">
-            <summary>
-            Remove a condition with the specified name from the collection if it exists.
-            </summary>
-            <param name="conditionName">The unique name of the condition.</param>
-            <param name="removeFromCache">If true a cached state of the condition will also be removed from the cache. By default true.</param>
-        </member>
-        <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.ResetAllConditions">
-            <summary>
-            Reset all condition states in the collection.
-            </summary>
         </member>
         <member name="M:Griesoft.Xamarin.RatingGateway.RatingGateway.Evaluate">
             <summary>
