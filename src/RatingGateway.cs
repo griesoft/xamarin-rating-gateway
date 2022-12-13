@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Griesoft.Xamarin.RatingGateway.Abstractions;
 using Griesoft.Xamarin.RatingGateway.Cache;
 using Griesoft.Xamarin.RatingGateway.Conditions;
 
