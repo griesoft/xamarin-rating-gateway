@@ -19,52 +19,19 @@ namespace Griesoft.Xamarin.RatingGateway
     /// Each time a rating action is triggered the gateway will manipulate conditions by given factors, evaluate through them to check if all necessary conditions are met,
     /// reset met conditions if allowed, and cache the current state of cachable conditions.
     /// </remarks>
-    public class RatingGateway
+    public class RatingGateway : ConditionCollection
     {
-        private readonly Dictionary<string, IRatingCondition> _ratingConditions;
-
-        internal RatingGateway()
+        internal RatingGateway() : base()
         {
-            _ratingConditions = new Dictionary<string, IRatingCondition>();
-
             RatingView = new DefaultRatingView();
-            RatingConditionCache = new DefaultRatingConditionCache();
         }
 
         private bool IsInitialized { get; set; } = false;
 
         /// <summary>
-        /// The condition collection returned as an enumerable.
-        /// </summary>
-        public IEnumerable<KeyValuePair<string, IRatingCondition>> RatingConditions => _ratingConditions.AsEnumerable();
-
-        /// <summary>
-        /// True if the condition collection contains any condition that is of type <see cref="ConditionType.Prerequisite"/>.
-        /// </summary>
-        public bool HasPrerequisiteConditions => _ratingConditions.Any(condition => condition.Value.ConditionType == ConditionType.Prerequisite);
-
-        /// <summary>
-        /// True if the condition collection contains any condition that is of type <see cref="ConditionType.Requirement"/>.
-        /// </summary>
-        public bool HasRequiredConditions => _ratingConditions.Any(condition => condition.Value.ConditionType == ConditionType.Requirement);
-
-        /// <summary>
-        /// True if the condition collection contains only conditions that are of type <see cref="ConditionType.Prerequisite"/>.
-        /// </summary>
-        /// <remarks>
-        /// Make sure that this always returns false. If it doesn't, the rating gateway will never prompt the user to review your application. 
-        /// </remarks>
-        public bool HasOnlyPrerequisiteConditions => _ratingConditions.Count > 0 && _ratingConditions.All(condition => condition.Value.ConditionType == ConditionType.Prerequisite);
-
-        /// <summary>
         /// The rating view that does display the rating page to the user.
         /// </summary>
         public IRatingView RatingView { get; set; }
-
-        /// <summary>
-        /// The rating condition cache that does manage the reading and writing of cached values to the file system.
-        /// </summary>
-        public IRatingConditionCache RatingConditionCache { get; set; }
 
         /// <summary>
         /// A singleton instance of the rating gateway.
@@ -127,66 +94,6 @@ namespace Griesoft.Xamarin.RatingGateway
             if (ratingCache != null)
             {
                 Current.RatingConditionCache = ratingCache;
-            }
-        }
-
-        /// <summary>
-        /// Add a condition to the collection.
-        /// </summary>
-        /// <param name="conditionName">The unique name of the condition.</param>
-        /// <param name="condition">The condition instance that will be added to the collection.</param>
-        /// <exception cref="System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
-        public void AddCondition(string conditionName, IRatingCondition condition)
-        {
-            _ratingConditions.Add(conditionName, condition);
-
-            if (condition is ICachableCondition cachableCondition && cachableCondition.CacheCurrentValue)
-            {
-                if (!RatingConditionCache.Load(conditionName, cachableCondition))
-                {
-                    RatingConditionCache.Save(conditionName, cachableCondition);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Add multiple conditions to the collection at once.
-        /// </summary>
-        /// <param name="conditions">A collection of key-value pairs where the key is used as the unique condition name and the value is added to the condition collection.</param>
-        /// <exception cref="System.ArgumentException">Thrown if a condition with the given name already exists in the collection.</exception>
-        public void AddCondition(IEnumerable<KeyValuePair<string, IRatingCondition>> conditions)
-        {
-            foreach(var condition in conditions)
-            {
-                AddCondition(condition.Key, condition.Value);
-            }
-        }
-
-        /// <summary>
-        /// Remove a condition with the specified name from the collection if it exists.
-        /// </summary>
-        /// <param name="conditionName">The unique name of the condition.</param>
-        /// <param name="removeFromCache">If true a cached state of the condition will also be removed from the cache. By default true.</param>
-        public void RemoveCondition(string conditionName, bool removeFromCache = true)
-        {
-            _ratingConditions.Remove(conditionName);
-
-            if (removeFromCache)
-            {
-                RatingConditionCache.Delete(conditionName);
-            }
-        }
-
-        /// <summary>
-        /// Reset all condition states in the collection.
-        /// </summary>
-        public void ResetAllConditions()
-        {
-            foreach(var condition in _ratingConditions)
-            {
-                condition.Value.Reset();
-
-                SaveCachableConditionState(condition.Key, condition.Value);
             }
         }
 
@@ -346,7 +253,7 @@ namespace Griesoft.Xamarin.RatingGateway
 
         private void ResetAllMetConditions(bool evaluationResult)
         {
-            foreach(var condition in _ratingConditions.Where(con => con.Value.ResetAfterConditionMet && con.Value.IsConditionMet))
+            foreach(var condition in RatingConditions.Where(con => con.Value.ResetAfterConditionMet && con.Value.IsConditionMet))
             {
                 if (condition.Value.ResetOnlyOnEvaluationSuccess && !evaluationResult)
                 {
@@ -360,7 +267,7 @@ namespace Griesoft.Xamarin.RatingGateway
         }
         private void ManipulateConditionState(Dictionary<string, object?>? parameters)
         {
-            foreach(var condition in _ratingConditions)
+            foreach(var condition in RatingConditions)
             {
                 var containsKey = parameters?.ContainsKey(condition.Key) ?? false;
                 var conditionParam = containsKey ? parameters?[condition.Key] : null;
@@ -385,7 +292,7 @@ namespace Griesoft.Xamarin.RatingGateway
         {
             // Make sure all prerequisite conditions are met before proceeding
             if (HasOnlyPrerequisiteConditions || 
-                !_ratingConditions.Where(condition => condition.Value.ConditionType == ConditionType.Prerequisite)
+                !RatingConditions.Where(condition => condition.Value.ConditionType == ConditionType.Prerequisite)
                 .All(condition => condition.Value.IsConditionMet))
             {
                 return false;
@@ -394,7 +301,7 @@ namespace Griesoft.Xamarin.RatingGateway
             var hasPriorConditions = priorityConditions != null && priorityConditions.Count() > 0;
 
             // Make sure all required conditions are met before proceeding
-            if (!_ratingConditions.Where(condition => condition.Value.ConditionType == ConditionType.Requirement)
+            if (!RatingConditions.Where(condition => condition.Value.ConditionType == ConditionType.Requirement)
                 .All(condition => condition.Value.IsConditionMet))
             {
                 return false;
@@ -409,21 +316,14 @@ namespace Griesoft.Xamarin.RatingGateway
             // Check that the condition of all specified conditions is met if we have any specified.
             if (hasPriorConditions)
             {
-                return priorityConditions.All(conditionName => _ratingConditions.ContainsKey(conditionName)
-                    ? _ratingConditions[conditionName].IsConditionMet
+                return priorityConditions.All(conditionName => ContainsKey(conditionName)
+                    ? this[conditionName].IsConditionMet
                     : false);
             }
 
             // No condition was prioritized, so it is enough for any standard condition to be true
-            return _ratingConditions.Any(condition => condition.Value.ConditionType == ConditionType.Standard &&
+            return RatingConditions.Any(condition => condition.Value.ConditionType == ConditionType.Standard &&
                 condition.Value.IsConditionMet);
-        }
-        private void SaveCachableConditionState(string conditionName, IRatingCondition condition)
-        {
-            if (condition is ICachableCondition cachableCondition && cachableCondition.CacheCurrentValue)
-            {
-                RatingConditionCache.Save(conditionName, cachableCondition);
-            }
         }
     }
 }
